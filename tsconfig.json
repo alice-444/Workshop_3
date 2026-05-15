@@ -1,0 +1,3 @@
+{
+  "extends": "@e-commerce/config/tsconfig.base.json"
+}

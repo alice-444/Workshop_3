@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { type FaqTabId } from "@/data/faq.data";
-import FaqTabs from "@/components/FaqTabs";
-import FaqAccordion from "@/components/FaqAccordion";
+import FaqTabs from "@/components/faq/FaqTabs";
+import FaqAccordion from "@/components/faq/FaqAccordion";
 
 export default function FaqClient() {
     const [active, setActive] = useState<FaqTabId>("commandes");

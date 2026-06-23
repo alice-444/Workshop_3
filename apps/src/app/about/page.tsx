@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Route } from "next";
 import Link from "next/link";
 import { Button } from "@e-commerce/ui/components/button";
-import ServicesSection from "@/components/sections/services-section";
+import ServicesSection from "@/components/sections/ServicesSection";
 
 export const metadata: Metadata = {
   title: "À propos",

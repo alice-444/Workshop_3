@@ -6,7 +6,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@e-commerce/ui/components/card";
-import AddToCartButton from "./add-to-cart-button";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 import type { Product } from "@/data/shop.data";
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {

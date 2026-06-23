@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
-import CartPopover from "./cart-popover";
-import { ModeToggle } from "./mode-toggle";
+import CartPopover from "@/components/cart/CartPopover";
+import { ModeToggle } from "@/components/ui/ModeToggle";
 
 const NAV_LINKS: { to: Route; label: string }[] = [
   { to: "/" as Route, label: "Accueil" },

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { type TabId } from "@/data/legal.data";
-import LegalTabs from "@/components/LegalTabs";
-import LegalContent from "@/components/LegalContent";
+import LegalTabs from "@/components/legal/LegalTabs";
+import LegalContent from "@/components/legal/LegalContent";
 
 export default function LegalClient() {
     const [active, setActive] = useState<TabId>("cgv");

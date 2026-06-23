@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { Button } from "@e-commerce/ui/components/button";
-import { useCart } from "./cart-provider";
+import { useCart } from "./CartProvider";
 import type { Product } from "@/data/shop.data";
 
 export default function AddToCartButton({ product }: { product: Product }) {

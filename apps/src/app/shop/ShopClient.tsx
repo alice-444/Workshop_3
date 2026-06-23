@@ -8,7 +8,7 @@ import {
   type ShopCategoryId,
   type ShopSortId,
 } from "@/data/shop.data";
-import ProductCard from "@/components/product-card";
+import ProductCard from "@/components/product/ProductCard";
 
 type Columns = 3 | 4;
 
@@ -46,8 +46,8 @@ export default function ShopClient() {
                 aria-selected={active}
                 onClick={() => setCategory(cat.id)}
                 className={`px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.15em] transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring ${active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                   }`}
                 style={{ fontFamily: "var(--font-body)" }}
               >
@@ -75,8 +75,8 @@ export default function ShopClient() {
                   aria-label={`${n} par rangée`}
                   title={`${n} par rangée`}
                   className={`flex items-center gap-[2px] px-2.5 py-1.5 rounded-full transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring ${active
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                     }`}
                 >
                   {Array.from({ length: n }).map((_, i) => (

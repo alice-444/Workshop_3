@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
 
 import "../index.css";
-import BackToTop from "@/components/back-to-top";
-import Footer from "@/components/footer";
-import Header from "@/components/header";
-import Providers from "@/components/providers";
+import BackToTop from "@/components/layout/BackToTop";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import Providers from "@/components/providers/Providers";
 
 // Serif élégante pour les titres — caractère librairie ancienne, artisanal
 const cormorantGaramond = Cormorant_Garamond({

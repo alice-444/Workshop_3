@@ -2,8 +2,8 @@
 
 import { Toaster } from "@e-commerce/ui/components/sonner";
 
-import { CartProvider } from "./cart-provider";
-import { ThemeProvider } from "./theme-provider";
+import { CartProvider } from "@/components/cart/CartProvider";
+import { ThemeProvider } from "./ThemeProvider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (

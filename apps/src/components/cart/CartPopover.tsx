@@ -5,7 +5,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { ShoppingBag, X, ArrowRight, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@e-commerce/ui/components/button";
-import { useCart } from "./cart-provider";
+import { useCart } from "./CartProvider";
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",

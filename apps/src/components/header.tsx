@@ -8,7 +8,7 @@ import { ModeToggle } from "./mode-toggle";
 
 const NAV_LINKS: { to: Route; label: string }[] = [
   { to: "/" as Route, label: "Accueil" },
-  { to: "/collections" as Route, label: "Collections" },
+  { to: "/shop" as Route, label: "Boutique" },
   { to: "/about" as Route, label: "À propos" },
   { to: "/contact" as Route, label: "Contact" },
 ];

@@ -63,10 +63,10 @@ export default function BackToTop() {
       </svg>
 
       {/* Cercle central */}
-      <div className="relative w-12 h-12 rounded-full bg-background/90 backdrop-blur-sm border border-border/60 shadow-md flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-300">
+      <div className="relative w-12 h-12 rounded-full bg-background/90 backdrop-blur-sm border border-border/60 shadow-md group-hover:shadow-lg group-hover:border-primary/40 group-hover:-translate-y-0.5 flex items-center justify-center transition-all duration-300">
         <ArrowUp
-          size={15}
-          className="text-muted-foreground group-hover:text-primary-foreground group-hover:-translate-y-0.5 transition-all duration-300"
+          size={14}
+          className="text-muted-foreground group-hover:text-primary group-hover:-translate-y-0.5 transition-all duration-300"
         />
       </div>
     </button>

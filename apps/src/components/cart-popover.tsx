@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { Route } from "next";
 import Link from "next/link";
-import { ShoppingBag, PackageOpen, X } from "lucide-react";
+import { ShoppingBag, X, ArrowRight } from "lucide-react";
+import { Button } from "@e-commerce/ui/components/button";
 
 export default function CartPopover() {
-  const itemCount: number = 0; // à brancher sur le vrai state
+  const itemCount: number = 0;
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +31,8 @@ export default function CartPopover() {
 
   return (
     <div ref={containerRef} className="relative">
+
+      {/* Trigger */}
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={`Panier — ${itemCount} article${itemCount !== 1 ? "s" : ""}`}
@@ -42,61 +45,72 @@ export default function CartPopover() {
             {itemCount > 99 ? "99+" : itemCount}
           </span>
         ) : (
-          <span className="absolute top-1 right-1 w-2 h-2 bg-primary/40 rounded-full" aria-hidden="true" />
+          <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-primary rounded-full" aria-hidden="true" />
         )}
       </button>
 
+      {/* Popover */}
       {open && (
         <div
           role="dialog"
           aria-label="Panier"
-          className="absolute right-0 top-full mt-3 w-80 rounded-2xl border border-border/60 bg-background/95 backdrop-blur-lg shadow-xl z-50 animate-in fade-in-0 zoom-in-95 duration-150 origin-top-right"
+          className="absolute right-0 top-full mt-3 w-72 rounded-2xl border border-border/50 bg-background/98 backdrop-blur-xl shadow-2xl z-50 animate-in fade-in-0 zoom-in-95 duration-200 origin-top-right overflow-hidden"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-border/50">
-            <h2
-              className="text-sm font-semibold tracking-wide text-foreground"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              Mon panier
-            </h2>
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-border/40">
+            <div className="flex items-center gap-2.5">
+              <ShoppingBag size={14} className="text-primary" />
+              <h2
+                className="text-sm font-semibold text-foreground tracking-wide"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
+                Mon panier
+              </h2>
+            </div>
             <button
               onClick={() => setOpen(false)}
               aria-label="Fermer le panier"
-              className="p-1 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+              className="p-1 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-all duration-150"
             >
-              <X size={14} />
+              <X size={13} />
             </button>
           </div>
 
-          {/* Empty state */}
+          {/* État vide */}
           {itemCount === 0 && (
-            <div className="flex flex-col items-center justify-center gap-4 px-6 py-10 text-center">
-              <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-muted/60">
-                <div className="absolute inset-0 bg-primary/5 rounded-2xl rotate-3" />
-                <PackageOpen size={28} className="relative text-muted-foreground/60" />
+            <div className="flex flex-col items-center gap-5 px-6 py-8 text-center">
+
+              {/* Illustration */}
+              <div className="relative w-20 h-20">
+                <div className="absolute inset-0 rounded-2xl opacity-60 bg-[oklch(0.93_0.02_72)] dark:bg-[oklch(0.28_0.025_62)]" />
+                <div className="absolute inset-0 rounded-2xl rotate-6 opacity-30 bg-[oklch(0.87_0.04_68)] dark:bg-[oklch(0.24_0.03_62)]" />
+                <div className="relative w-full h-full flex items-center justify-center text-3xl select-none">
+                  🛒
+                </div>
               </div>
-              <div className="space-y-1">
+
+              {/* Texte */}
+              <div className="flex flex-col gap-1.5">
                 <p
-                  className="text-sm font-medium text-foreground"
+                  className="text-sm font-semibold text-foreground"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
                   Votre panier est vide
                 </p>
                 <p
-                  className="text-xs text-muted-foreground leading-relaxed max-w-[200px]"
+                  className="text-[11px] text-muted-foreground leading-relaxed"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
-                  Découvrez nos pièces artisanales en bois, façonnées avec soin.
+                  Explorez nos créations artisanales<br />en bois, façonnées à la main.
                 </p>
               </div>
-              <Link
-                href={"/collections" as Route}
-                onClick={() => setOpen(false)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-primary-foreground text-xs font-medium tracking-wide uppercase transition-opacity hover:opacity-90 no-underline"
-                style={{ fontFamily: "var(--font-body)" }}
-              >
-                Voir les collections
+
+              {/* CTA */}
+              <Link href={"/shop" as Route} onClick={() => setOpen(false)}>
+                <Button size="sm" className="gap-2 px-5 text-[11px] tracking-[0.1em] uppercase group">
+                  Voir la boutique
+                  <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+                </Button>
               </Link>
             </div>
           )}

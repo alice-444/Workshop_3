@@ -2,6 +2,8 @@
 import Link from "next/link";
 import type { Route } from "next";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 import CartPopover from "./cart-popover";
 import { ModeToggle } from "./mode-toggle";
@@ -15,6 +17,7 @@ const NAV_LINKS: { to: Route; label: string }[] = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 pointer-events-none">
@@ -31,7 +34,7 @@ export default function Header() {
             <Link
               href="/"
               className="group flex items-center gap-3 no-underline shrink-0"
-              aria-label="Bois & Art — Retour à l'accueil"
+              aria-label="Animal-Totem — Retour à l'accueil"
             >
               <div className="relative w-8 h-8 flex items-center justify-center">
                 <div className="absolute inset-0 bg-primary/10 rotate-45 rounded-sm group-hover:bg-primary/20 transition-colors duration-300" />
@@ -42,7 +45,7 @@ export default function Header() {
                   className="text-xl font-semibold tracking-wide text-foreground group-hover:text-primary transition-colors duration-300"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  Bois <span className="text-primary">&amp;</span> Art
+                  Animal-Totem
                 </span>
                 <span className="text-[8px] uppercase tracking-[0.3em] text-muted-foreground font-light mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
                   Artisan créateur
@@ -50,7 +53,7 @@ export default function Header() {
               </div>
             </Link>
 
-            {/* Navigation centrale */}
+            {/* Navigation centrale — desktop */}
             <nav aria-label="Navigation principale" className="hidden md:block">
               <ul className="flex items-center gap-1 list-none">
                 {NAV_LINKS.map(({ to, label }) => {
@@ -79,8 +82,54 @@ export default function Header() {
             <div className="flex items-center gap-2 shrink-0">
               <CartPopover />
               <ModeToggle />
+              {/* Burger — mobile uniquement */}
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+                aria-expanded={menuOpen}
+                className="md:hidden flex items-center justify-center w-9 h-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-200"
+              >
+                {menuOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
             </div>
           </div>
+
+          {/* Menu mobile déroulant */}
+          <div
+            className={[
+              "md:hidden overflow-hidden transition-all duration-300 ease-in-out",
+              menuOpen ? "max-h-80 opacity-100 mt-2" : "max-h-0 opacity-0",
+            ].join(" ")}
+          >
+            <nav
+              aria-label="Navigation mobile"
+              className="bg-background/95 backdrop-blur-md border border-border/60 rounded-2xl shadow-sm px-3 py-3"
+            >
+              <ul className="flex flex-col gap-1 list-none">
+                {NAV_LINKS.map(({ to, label }) => {
+                  const isActive = pathname === to;
+                  return (
+                    <li key={to}>
+                      <Link
+                        href={to}
+                        onClick={() => setMenuOpen(false)}
+                        className={[
+                          "block px-4 py-2.5 text-[11px] uppercase tracking-[0.15em] font-medium rounded-full transition-all duration-200 no-underline",
+                          isActive
+                            ? "text-primary bg-primary/8"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted/60",
+                        ].join(" ")}
+                        style={{ fontFamily: "var(--font-body)" }}
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </div>
+
         </div>
       </div>
     </header>

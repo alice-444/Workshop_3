@@ -1,25 +1,32 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 
 import "../index.css";
+import BackToTop from "@/components/back-to-top";
+import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Providers from "@/components/providers";
 
-// TODO: Add 2 fonts
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+// Serif élégante pour les titres — caractère librairie ancienne, artisanal
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+});
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+// Sans-serif géométrique lisible pour le corps — moderne mais sobre
+const jost = Jost({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+});
 
-// TODO: Add more words for SEO and modify the description and title
 export const metadata: Metadata = {
-  title: "e-commerce",
-  description: "e-commerce",
+  title: "Bois & Art — Décorations en bois faites main",
+  description:
+    "Créations artisanales uniques en bois local : sculptures, cadres, objets décoratifs façonnés à la main avec soin. Chaque pièce est une oeuvre, taillée pour durer.",
+  keywords: ["bois", "artisanat", "décorations", "fait main", "sculptures", "cadres bois", "artisan"],
 };
 
 export default function RootLayout({
@@ -28,14 +35,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      {/* <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}> */}
-      <body className={`antialiased`}>
+    <html lang="fr" suppressHydrationWarning>
+      <body className={`${cormorantGaramond.variable} ${jost.variable} antialiased`}>
         <Providers>
-          <div className="grid grid-rows-[auto_1fr] h-svh">
+          <div className="grid grid-rows-[auto_1fr_auto] min-h-svh">
             <Header />
             {children}
+            <Footer />
           </div>
+          <BackToTop />
         </Providers>
       </body>
     </html>

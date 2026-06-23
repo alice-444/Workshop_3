@@ -30,11 +30,17 @@ export type Product = {
   bg: { light: string; dark: string };
   /** Disponibilité — absent ou `true` = en stock. */
   inStock?: boolean;
+  /** Note moyenne sur 5. */
+  rating?: number;
+  /** Nombre d'avis clients. */
+  reviewCount?: number;
 };
 
 export const PRODUCTS: Product[] = [
   {
     id: 1,
+    rating: 4.8,
+    reviewCount: 24,
     name: "Cadre chêne sculpté",
     description:
       "Cadre photo taillé à la main dans du chêne massif local. Finition huile naturelle.",
@@ -47,6 +53,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 2,
+    rating: 5,
+    reviewCount: 12,
     name: "Sculpture abstraite",
     description:
       "Pièce unique en noyer, forme organique travaillée à la gouge. H. 22 cm.",
@@ -59,6 +67,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 3,
+    rating: 4.7,
+    reviewCount: 41,
     name: "Étagère flottante",
     description:
       "Étagère en frêne brut, bords naturels conservés. Livrée avec fixations invisibles.",
@@ -71,6 +81,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 4,
+    rating: 4.5,
+    reviewCount: 18,
     name: "Vide-poche rond",
     description:
       "Vide-poche tourné au tour à bois en merisier. Bords légèrement flammés.",
@@ -83,6 +95,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 5,
+    rating: 4.9,
+    reviewCount: 56,
     name: "Planche à découper",
     description:
       "Planche bout de bois en hêtre étuvé, traitée à l'huile de lin alimentaire.",
@@ -95,6 +109,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 6,
+    rating: 4.6,
+    reviewCount: 33,
     name: "Cuillères taillées",
     description:
       "Lot de deux cuillères de service sculptées au couteau croche dans du bouleau.",
@@ -107,6 +123,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 7,
+    rating: 4.8,
+    reviewCount: 9,
     name: "Tabouret tripode",
     description:
       "Tabouret bas assemblé sans vis, assise en chêne, pieds tournés en frêne.",
@@ -119,6 +137,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 8,
+    rating: 4.7,
+    reviewCount: 21,
     name: "Bol creusé",
     description:
       "Grand bol évidé à la gouge dans une bille d'orme, finition cire d'abeille.",
@@ -132,6 +152,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 9,
+    rating: 4.9,
+    reviewCount: 15,
     name: "Oiseau stylisé",
     description:
       "Petite sculpture d'oiseau au galbe épuré, poncée à la main dans du tilleul.",
@@ -144,6 +166,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 10,
+    rating: 4.4,
+    reviewCount: 27,
     name: "Patère murale",
     description:
       "Trio de patères en noyer huilé, formes douces. Vis et chevilles fournies.",
@@ -156,6 +180,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 11,
+    rating: 5,
+    reviewCount: 7,
     name: "Console d'entrée",
     description:
       "Console fine en frêne massif, plateau biseauté et piètement compas. L. 90 cm.",
@@ -169,6 +195,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 12,
+    rating: 4.6,
+    reviewCount: 11,
     name: "Galet décoratif",
     description:
       "Forme galet polie au tampon, veinage flammé du merisier mis en valeur.",

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import type { Route } from "next";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import ShopClient from "./ShopClient";
 
 export const metadata: Metadata = {
@@ -11,6 +13,13 @@ export default function ShopPage() {
     return (
         <main className="overflow-x-hidden">
             <section className="max-w-6xl mx-auto px-6 pt-12 pb-24">
+                <Breadcrumbs
+                    items={[
+                        { label: "Accueil", href: "/" as Route },
+                        { label: "Boutique" },
+                    ]}
+                />
+
                 {/* En-tête */}
                 <header className="max-w-2xl mb-14">
                     <div className="flex items-center gap-2 mb-4">

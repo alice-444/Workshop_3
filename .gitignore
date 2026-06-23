@@ -33,6 +33,8 @@ build
 *.swo
 *~
 .DS_Store
+.claude/*
+.cursor/*
 
 # Logs
 logs

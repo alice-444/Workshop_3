@@ -7,13 +7,51 @@ sensibles (paiement, envoi d'e-mail) sont simulées côté client.
 ## Boutique (`/shop`)
 
 - **Catalogue** de produits issus de `shop.data.ts`.
+- **Recherche** par nom de création (champ avec effacement rapide).
 - **Filtre par catégorie** (onglets).
+- **Filtre par disponibilité** (bascule « En stock »).
 - **Tri** : nouveautés, prix croissant, prix décroissant.
 - **Densité de la grille** réglable (3 ou 4 colonnes, ≥ desktop).
+- **Chargement progressif** : affichage par lots via un bouton « Voir plus »
+  (réinitialisé à chaque changement de filtre).
 - **Compteur** de créations + nombre d'articles **en rupture de stock**.
-- Composant `ProductCard` avec bouton **Ajouter au panier**.
+- **État vide enrichi** : icône, message contextuel (reprend le terme
+  recherché) et CTA **« Réinitialiser les filtres »**.
+- **Fil d'Ariane** (`Accueil › Boutique`).
+- Composant `ProductCard` (cliquable vers la fiche produit) : visuel, **note
+  étoilée**, prix et bouton **Ajouter au panier**.
 
 > Logique dans `app/shop/ShopClient.tsx`.
+
+Pipeline appliqué à la liste des produits :
+
+```mermaid
+flowchart LR
+    all["PRODUCTS"]
+    cat["Filtre<br/>catégorie"]
+    stock["Filtre<br/>disponibilité"]
+    search["Recherche<br/>(nom)"]
+    sort["Tri<br/>(prix / nouveautés)"]
+    page["Chargement<br/>progressif"]
+    grid["Grille<br/>affichée"]
+
+    all --> cat --> stock --> search --> sort --> page --> grid
+```
+
+## Page produit (`/shop/[id]`)
+
+- Route **dynamique**, une fiche par produit.
+- Pré-génération statique (`generateStaticParams`) et **métadonnées par
+  produit** (`generateMetadata` : titre + description).
+- **404** (`notFound()`) si l'identifiant est inconnu ou non numérique.
+- Contenu : grand visuel, tag, catégorie, **note étoilée**, prix, description,
+  tableau de **caractéristiques** (essence, catégorie, finition, disponibilité).
+- **Sélecteur de quantité** + ajout au panier (`ProductBuyBox`) ; bouton
+  « Indisponible » désactivé si en rupture.
+- **Produits liés** (même catégorie).
+- **Fil d'Ariane** (`Accueil › Boutique › <produit>`).
+
+> `app/shop/[id]/page.tsx` (serveur) + `app/shop/[id]/ProductBuyBox.tsx` (client).
 
 ## Panier
 
@@ -25,6 +63,23 @@ sensibles (paiement, envoi d'e-mail) sont simulées côté client.
 - ⚠️ Pas de tunnel de paiement (démonstration).
 
 > `components/cart/CartProvider.tsx`, `CartPopover.tsx`, `AddToCartButton.tsx`.
+
+Parcours d'ajout au panier :
+
+```mermaid
+sequenceDiagram
+    actor U as Utilisateur
+    participant B as Bouton (carte / fiche)
+    participant C as CartProvider
+    participant L as localStorage
+    participant T as Toast (sonner)
+
+    U->>B: Clic « Ajouter »
+    B->>C: addItem(produit, quantité)
+    C->>C: met à jour les articles
+    C->>L: persiste (useEffect)
+    B->>T: notification de succès
+```
 
 ## Contact (`/contact`)
 

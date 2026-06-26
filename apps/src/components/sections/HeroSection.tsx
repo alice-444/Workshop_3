@@ -72,11 +72,6 @@ export default function HeroSection() {
                 Découvrir nos créations
               </Button>
             </Link>
-            <Link href={"/about" as Route}>
-              <Button variant="ghost" size="lg" className="px-6 h-11 text-xs tracking-[0.15em] uppercase">
-                Notre histoire
-              </Button>
-            </Link>
           </div>
         </div>
 

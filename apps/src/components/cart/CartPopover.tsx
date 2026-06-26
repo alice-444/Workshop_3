@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Route } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import type { Route } from "next";
 import { ShoppingBag, X, ArrowRight, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@e-commerce/ui/components/button";
 import { useCart } from "./CartProvider";
@@ -14,7 +15,7 @@ const priceFormatter = new Intl.NumberFormat("fr-FR", {
 });
 
 export default function CartPopover() {
-  const { items, itemCount, subtotal, updateQuantity, removeItem } = useCart();
+  const { items, itemCount, subtotal, checkoutUrl, loading, updateQuantity, removeItem } = useCart();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -137,8 +138,12 @@ export default function CartPopover() {
                     className="flex items-center gap-3 px-4 py-2.5 hover:bg-muted/40 transition-colors"
                   >
                     {/* Vignette */}
-                    <div className="w-11 h-11 shrink-0 rounded-lg flex items-center justify-center text-xl bg-[oklch(0.93_0.02_72)] dark:bg-[oklch(0.26_0.025_58)]">
-                      <span role="img" aria-hidden="true">{item.emoji}</span>
+                    <div className="w-11 h-11 shrink-0 rounded-lg overflow-hidden bg-[oklch(0.93_0.02_72)] dark:bg-[oklch(0.26_0.025_58)] flex items-center justify-center text-xl">
+                      {item.image ? (
+                        <Image src={item.image} alt={item.name} width={44} height={44} className="object-cover w-full h-full" />
+                      ) : (
+                        <span role="img" aria-hidden="true">{item.emoji}</span>
+                      )}
                     </div>
 
                     {/* Infos */}
@@ -159,9 +164,10 @@ export default function CartPopover() {
                       {/* Contrôle quantité */}
                       <div className="flex items-center gap-1.5 mt-1.5">
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.lineId, item.quantity - 1)}
+                          disabled={loading}
                           aria-label={`Réduire la quantité de ${item.name}`}
-                          className="w-5 h-5 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors"
+                          className="w-5 h-5 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-40"
                         >
                           <Minus size={11} />
                         </button>
@@ -172,9 +178,10 @@ export default function CartPopover() {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.lineId, item.quantity + 1)}
+                          disabled={loading}
                           aria-label={`Augmenter la quantité de ${item.name}`}
-                          className="w-5 h-5 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors"
+                          className="w-5 h-5 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-40"
                         >
                           <Plus size={11} />
                         </button>
@@ -183,7 +190,7 @@ export default function CartPopover() {
 
                     {/* Supprimer */}
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeItem(item.lineId)}
                       aria-label={`Retirer ${item.name} du panier`}
                       className="p-1.5 rounded-full text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors self-start"
                     >
@@ -209,12 +216,18 @@ export default function CartPopover() {
                     {priceFormatter.format(subtotal)}
                   </span>
                 </div>
-                <Link href={"/checkout" as Route} onClick={() => setOpen(false)}>
-                  <Button size="sm" className="w-full gap-2 text-[11px] tracking-[0.1em] uppercase group">
+                {checkoutUrl ? (
+                  <a href={checkoutUrl} onClick={() => setOpen(false)}>
+                    <Button size="sm" className="w-full gap-2 text-[11px] tracking-[0.1em] uppercase group">
+                      Commander
+                      <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+                    </Button>
+                  </a>
+                ) : (
+                  <Button size="sm" disabled className="w-full gap-2 text-[11px] tracking-[0.1em] uppercase">
                     Commander
-                    <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
                   </Button>
-                </Link>
+                )}
               </div>
             </>
           )}

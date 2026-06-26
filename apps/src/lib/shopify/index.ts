@@ -2,6 +2,7 @@ export type {
   ShopifyProduct,
   ShopifyCart,
   ShopifyCartLine,
+  ShopifyMediaNode,
   NormalizedProduct,
 } from "./types";
 export { getProducts, getProduct } from "./products";

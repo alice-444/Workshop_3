@@ -1,7 +1,5 @@
 import type { ShopifyProduct, NormalizedProduct } from "./types";
 
-const CATEGORY_TAGS = ["decoration", "sculpture"];
-
 const LABEL_TAGS = [
   "nouveau",
   "best-seller",
@@ -15,8 +13,7 @@ export function normalizeProduct(p: ShopifyProduct): NormalizedProduct {
   const metafield = (key: string) =>
     p.metafields?.find((m) => m?.key === key)?.value ?? "";
 
-  const category =
-    p.tags.find((t) => CATEGORY_TAGS.includes(t.toLowerCase())) ?? "";
+  const category = p.productType.trim().toLowerCase();
 
   const tag =
     p.tags.find((t) => LABEL_TAGS.includes(t.toLowerCase())) ?? p.tags[0] ?? "";

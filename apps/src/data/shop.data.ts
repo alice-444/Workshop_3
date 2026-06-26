@@ -1,7 +1,6 @@
 export const SHOP_CATEGORIES = [
   { id: "tout", label: "Tout" },
   { id: "decoration", label: "Décoration" },
-  { id: "sculpture", label: "Sculpture" },
 ] as const;
 
 export type ShopCategoryId = (typeof SHOP_CATEGORIES)[number]["id"];

@@ -22,15 +22,25 @@ export type ShopifyMetafield = {
   value: string;
 };
 
+export type ShopifyMediaNode =
+  | { mediaContentType: "IMAGE"; image: ShopifyImage }
+  | {
+      mediaContentType: "VIDEO";
+      sources: { url: string; mimeType: string }[];
+      previewImage: { url: string } | null;
+    };
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
   title: string;
   description: string;
   availableForSale: boolean;
+  productType: string;
   tags: string[];
   featuredImage: ShopifyImage | null;
   images: { nodes: ShopifyImage[] };
+  media: { nodes: ShopifyMediaNode[] };
   priceRange: {
     minVariantPrice: ShopifyMoneyV2;
   };

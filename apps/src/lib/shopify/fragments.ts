@@ -5,9 +5,22 @@ export const PRODUCT_FRAGMENT = `
     title
     description
     availableForSale
+    productType
     tags
     featuredImage { url altText width height }
-    images(first: 5) { nodes { url altText width height } }
+    images(first: 10) { nodes { url altText width height } }
+    media(first: 10) {
+      nodes {
+        mediaContentType
+        ... on Video {
+          sources { url mimeType }
+          previewImage { url }
+        }
+        ... on MediaImage {
+          image { url altText width height }
+        }
+      }
+    }
     priceRange { minVariantPrice { amount currencyCode } }
     variants(first: 10) {
       nodes { id title availableForSale price { amount currencyCode } }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Route } from "next";
-import { FaInstagram } from "react-icons/fa";
+import { FaInstagram, FaFacebook } from "react-icons/fa";
 
 const LINKS: { href: Route; label: string }[] = [
   { href: "/shop" as Route, label: "Boutique" },
@@ -11,6 +11,7 @@ const LINKS: { href: Route; label: string }[] = [
 ];
 
 const INSTAGRAM_URL = "#";
+const FACEBOOK_URL = "#";
 
 export default function Footer() {
   return (
@@ -37,15 +38,26 @@ export default function Footer() {
           ))}
         </nav>
 
-        <Link
-          href={INSTAGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram"
-          className="p-2 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/60 transition-all duration-200 shrink-0"
-        >
-          <FaInstagram size={24} />
-        </Link>
+        <div className="flex items-center gap-1 shrink-0">
+          <Link
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="p-2 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/60 transition-all duration-200"
+          >
+            <FaInstagram size={24} />
+          </Link>
+          <Link
+            href={FACEBOOK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            className="p-2 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/60 transition-all duration-200"
+          >
+            <FaFacebook size={24} />
+          </Link>
+        </div>
 
       </div>
     </footer>

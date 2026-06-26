@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 export default async function ShopPage() {
     const raw = await getProducts();
     const products = raw.map(normalizeProduct);
+    const categories = Array.from(new Set(products.map((p) => p.category).filter(Boolean))).sort();
     return (
         <main className="overflow-x-hidden">
             <section className="max-w-6xl mx-auto px-6 pt-12 pb-24">
@@ -49,7 +50,7 @@ export default async function ShopPage() {
                     </p>
                 </header>
 
-                <ShopClient products={products} />
+                <ShopClient products={products} categories={categories} />
             </section>
         </main>
     );

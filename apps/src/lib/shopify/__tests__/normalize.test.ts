@@ -9,6 +9,7 @@ function makeProduct(overrides: Partial<ShopifyProduct> = {}): ShopifyProduct {
     title: "Cadre chêne sculpté",
     description: "Un cadre en chêne massif.",
     availableForSale: true,
+    productType: "decoration",
     tags: ["decoration", "nouveau"],
     featuredImage: {
       url: "https://cdn.shopify.com/image.jpg",
@@ -17,6 +18,7 @@ function makeProduct(overrides: Partial<ShopifyProduct> = {}): ShopifyProduct {
       height: 800,
     },
     images: { nodes: [] },
+    media: { nodes: [] },
     priceRange: { minVariantPrice: { amount: "78.00", currencyCode: "EUR" } },
     variants: {
       nodes: [
@@ -54,25 +56,14 @@ describe("normalizeProduct", () => {
     expect(result.price).toBe(78);
   });
 
-  it("extrait la catégorie decoration depuis les tags", () => {
-    const result = normalizeProduct(
-      makeProduct({ tags: ["decoration", "nouveau"] }),
-    );
-    expect(result.category).toBe("decoration");
+  it("utilise productType comme catégorie", () => {
+    const result = normalizeProduct(makeProduct({ productType: "Ornement" }));
+    expect(result.category).toBe("ornement");
   });
 
-  it("extrait la catégorie sculpture depuis les tags", () => {
-    const result = normalizeProduct(
-      makeProduct({ tags: ["sculpture", "nouveau"] }),
-    );
-    expect(result.category).toBe("sculpture");
-  });
-
-  it("retourne une catégorie vide pour cuisine et mobilier", () => {
-    const cuisine = normalizeProduct(makeProduct({ tags: ["cuisine"] }));
-    const mobilier = normalizeProduct(makeProduct({ tags: ["mobilier"] }));
-    expect(cuisine.category).toBe("");
-    expect(mobilier.category).toBe("");
+  it("retourne une catégorie vide si productType est vide", () => {
+    const result = normalizeProduct(makeProduct({ productType: "" }));
+    expect(result.category).toBe("");
   });
 
   it("extrait le tag label depuis les tags", () => {
@@ -89,9 +80,9 @@ describe("normalizeProduct", () => {
     expect(result.tag).toBe("decoration");
   });
 
-  it("retourne une catégorie vide si aucun tag catégorie reconnu", () => {
+  it("retourne une catégorie vide si aucun tag label reconnu (fallback premier tag)", () => {
     const result = normalizeProduct(makeProduct({ tags: ["nouveau"] }));
-    expect(result.category).toBe("");
+    expect(result.category).toBe("decoration"); // vient de productType du makeProduct de base
   });
 
   it("extrait les metafields correctement", () => {

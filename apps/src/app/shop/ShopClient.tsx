@@ -2,12 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Search, X, PackageOpen } from "lucide-react";
-import {
-  SHOP_CATEGORIES,
-  SHOP_SORTS,
-  type ShopCategoryId,
-  type ShopSortId,
-} from "@/data/shop.data";
+import { SHOP_SORTS, type ShopSortId } from "@/data/shop.data";
 import type { NormalizedProduct } from "@/lib/shopify";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -15,8 +10,14 @@ type Columns = 3 | 4;
 
 const PAGE_SIZE = 8;
 
-export default function ShopClient({ products: allProducts }: { products: NormalizedProduct[] }) {
-  const [category, setCategory] = useState<ShopCategoryId>("tout");
+export default function ShopClient({
+  products: allProducts,
+  categories,
+}: {
+  products: NormalizedProduct[];
+  categories: string[];
+}) {
+  const [category, setCategory] = useState("tout");
   const [sort, setSort] = useState<ShopSortId>("nouveautes");
   const [columns, setColumns] = useState<Columns>(4);
   const [query, setQuery] = useState("");
@@ -87,21 +88,21 @@ export default function ShopClient({ products: allProducts }: { products: Normal
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-12">
         {/* Catégories */}
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Catégories">
-          {SHOP_CATEGORIES.map((cat) => {
-            const active = cat.id === category;
+          {["tout", ...categories].map((cat) => {
+            const active = cat === category;
             return (
               <button
-                key={cat.id}
+                key={cat}
                 role="tab"
                 aria-selected={active}
-                onClick={() => setCategory(cat.id)}
+                onClick={() => setCategory(cat)}
                 className={`px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.15em] transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring ${active
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                   }`}
                 style={{ fontFamily: "var(--font-body)" }}
               >
-                {cat.label}
+                {cat === "tout" ? "Tout" : cat}
               </button>
             );
           })}
@@ -122,9 +123,9 @@ export default function ShopClient({ products: allProducts }: { products: Normal
             En stock
           </button>
 
-          {/* Densité de la grille — masqué sur petit écran */}
+          {/* Densité de la grille — masqué sur petit écran, visible à partir de 4 produits */}
           <div
-            className="hidden lg:flex items-center gap-1 border border-border/60 rounded-full p-1"
+            className={`items-center gap-1 border border-border/60 rounded-full p-1 ${products.length >= 4 ? "hidden lg:flex" : "hidden"}`}
             role="group"
             aria-label="Nombre de créations par rangée"
           >

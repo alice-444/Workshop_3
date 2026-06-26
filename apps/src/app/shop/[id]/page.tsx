@@ -8,7 +8,7 @@ import ProductCard from "@/components/product/ProductCard";
 import StarRating from "@/components/ui/StarRating";
 import { SHOP_CATEGORIES } from "@/data/shop.data";
 import { getProducts, getProduct, normalizeProduct } from "@/lib/shopify";
-import ProductBuyBox from "./ProductBuyBox";
+import ProductBuyBox from "@/components/product/ProductBuyBox";
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",

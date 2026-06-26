@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type { NormalizedProduct } from "@/lib/shopify";
@@ -42,6 +43,7 @@ const CART_URL_KEY = "shopify_cart_url";
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [cartId, setCartId] = useState<string | null>(null);
+  const cartIdRef = useRef<string | null>(null);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +54,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!storedId) return;
 
     setCartId(storedId);
+    cartIdRef.current = storedId;
     if (storedUrl) setCheckoutUrl(storedUrl);
 
     getCart(storedId).then((cart) => {
@@ -78,10 +81,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   async function ensureCart(): Promise<string> {
-    if (cartId) return cartId;
+    if (cartIdRef.current) return cartIdRef.current;
     const cart = await createCart();
     localStorage.setItem(CART_ID_KEY, cart.id);
     localStorage.setItem(CART_URL_KEY, cart.checkoutUrl);
+    cartIdRef.current = cart.id;
     setCartId(cart.id);
     setCheckoutUrl(cart.checkoutUrl);
     return cart.id;
@@ -106,8 +110,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartId]);
+  }, []);
 
   const updateQuantity = useCallback(async (lineId: string, quantity: number) => {
     if (!cartId) return;

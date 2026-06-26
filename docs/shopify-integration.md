@@ -160,8 +160,9 @@ Tags reconnus : `nouveau`, `best-seller`, `coup de cœur`, `artisanal`, `fait ma
 
 ## Flux panier
 
-Le `CartProvider` (`apps/src/components/cart/CartProvider.tsx`) gère le panier en mémoire.
-L'intégration Shopify Cart API est la prochaine étape (voir PRP).
+Le `CartProvider` (`apps/src/components/cart/CartProvider.tsx`) est branché sur la Shopify Cart API.
+Le `cartId` et le `checkoutUrl` sont persistés en `localStorage` (`shopify_cart_id` / `shopify_cart_url`).
+Au montage, le cart est rechargé depuis Shopify via `getCart()` — s'il a expiré, on repart de zéro.
 
 ```mermaid
 sequenceDiagram
@@ -185,7 +186,7 @@ sequenceDiagram
     F-->>U: Panier mis à jour
 
     U->>F: Modifie quantité
-    F->>C: updateQuantity(id, qty)
+    F->>C: updateQuantity(lineId, qty)
     C->>S: updateCartLine(cartId, lineId, qty)
     S-->>C: ShopifyCart mis à jour
 
@@ -194,6 +195,14 @@ sequenceDiagram
     U->>S: Saisit paiement
     S-->>U: Confirmation + email automatique
 ```
+
+---
+
+## Page d'accueil
+
+`FeaturedProductsSection` (`apps/src/components/sections/FeaturedProductsSection.tsx`) est un Server Component qui fetch les 4 premiers produits Shopify et les affiche via `ProductCard`.
+
+Si aucun produit n'est disponible dans Shopify, la section n'est pas rendue (`return null`).
 
 ---
 

@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { Button } from "@e-commerce/ui/components/button";
 import { useCart } from "./CartProvider";
-import type { NormalizedProduct } from "@/types/shopify";
+import type { NormalizedProduct } from "@/lib/shopify";
 
 export default function AddToCartButton({ product }: { product: NormalizedProduct }) {
   const { addItem } = useCart();

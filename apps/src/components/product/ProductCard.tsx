@@ -11,7 +11,7 @@ import {
 } from "@e-commerce/ui/components/card";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import StarRating from "@/components/ui/StarRating";
-import type { NormalizedProduct } from "@/types/shopify";
+import type { NormalizedProduct } from "@/lib/shopify";
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",

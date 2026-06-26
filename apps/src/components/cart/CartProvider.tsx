@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import type { NormalizedProduct } from "@/types/shopify";
+import type { NormalizedProduct } from "@/lib/shopify";
 
 export type CartItem = {
   id: string;

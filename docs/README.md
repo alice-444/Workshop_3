@@ -12,6 +12,7 @@ avec une bibliothèque d'UI partagée basée sur **shadcn/ui**.
 | [architecture.md](./architecture.md) | Structure du monorepo, de l'application et des données |
 | [conventions.md](./conventions.md) | Conventions de nommage, imports, styles et composants |
 | [développement.md](./développement.md) | Installation, scripts, workflow local |
+| [shopify-integration.md](./shopify-integration.md) | Intégration Shopify : API, types, metafields, panier |
 
 ## En bref
 

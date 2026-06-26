@@ -5,7 +5,7 @@ import { Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@e-commerce/ui/components/button";
 import { useCart } from "@/components/cart/CartProvider";
-import type { NormalizedProduct } from "@/types/shopify";
+import type { NormalizedProduct } from "@/lib/shopify";
 
 export default function ProductBuyBox({ product }: { product: NormalizedProduct }) {
   const { addItem } = useCart();

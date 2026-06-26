@@ -8,7 +8,7 @@ import {
   type ShopCategoryId,
   type ShopSortId,
 } from "@/data/shop.data";
-import type { NormalizedProduct } from "@/types/shopify";
+import type { NormalizedProduct } from "@/lib/shopify";
 import ProductCard from "@/components/product/ProductCard";
 
 type Columns = 3 | 4;

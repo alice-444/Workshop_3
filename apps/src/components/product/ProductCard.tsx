@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { Route } from "next";
 import {
@@ -10,7 +11,7 @@ import {
 } from "@e-commerce/ui/components/card";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import StarRating from "@/components/ui/StarRating";
-import type { Product } from "@/data/shop.data";
+import type { NormalizedProduct } from "@/lib/shopify";
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",
@@ -18,8 +19,8 @@ const priceFormatter = new Intl.NumberFormat("fr-FR", {
   minimumFractionDigits: 0,
 });
 
-export default function ProductCard({ product }: { product: Product }) {
-  const outOfStock = product.inStock === false;
+export default function ProductCard({ product }: { product: NormalizedProduct }) {
+  const outOfStock = !product.availableForSale;
 
   return (
     <Card
@@ -27,7 +28,7 @@ export default function ProductCard({ product }: { product: Product }) {
         }`}
     >
       <Link
-        href={`/shop/${product.id}` as Route}
+        href={`/shop/${product.handle}` as Route}
         className="block outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-t-[inherit]"
         aria-label={`Voir ${product.name}`}
       >
@@ -40,14 +41,23 @@ export default function ProductCard({ product }: { product: Product }) {
             } as CSSProperties
           }
         >
-          <div
-            className={`absolute inset-0 flex items-center justify-center text-6xl transition-transform duration-500 ${outOfStock ? "grayscale opacity-40" : "group-hover:scale-110"
-              }`}
-          >
-            <span role="img" aria-label={product.name}>
-              {product.emoji}
-            </span>
-          </div>
+          {product.image ? (
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className={`object-cover transition-transform duration-500 ${outOfStock ? "grayscale opacity-40" : "group-hover:scale-110"}`}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            />
+          ) : (
+            <div
+              className={`absolute inset-0 flex items-center justify-center text-6xl transition-transform duration-500 ${outOfStock ? "grayscale opacity-40" : "group-hover:scale-110"}`}
+            >
+              <span role="img" aria-label={product.name}>
+                {product.emoji}
+              </span>
+            </div>
+          )}
           {outOfStock && (
             <span
               className="absolute top-2.5 left-2.5 rounded-full bg-foreground/85 text-background px-2.5 py-1 text-[8px] uppercase tracking-[0.2em] font-medium backdrop-blur-sm"

@@ -5,15 +5,15 @@ import { Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@e-commerce/ui/components/button";
 import { useCart } from "@/components/cart/CartProvider";
-import type { Product } from "@/data/shop.data";
+import type { NormalizedProduct } from "@/lib/shopify";
 
-export default function ProductBuyBox({ product }: { product: Product }) {
-  const { addItem } = useCart();
+export default function ProductBuyBox({ product }: { product: NormalizedProduct }) {
+  const { addItem, loading } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const outOfStock = product.inStock === false;
+  const outOfStock = !product.availableForSale;
 
-  function handleAdd() {
-    addItem(product, quantity);
+  async function handleAdd() {
+    await addItem(product, quantity);
     toast.success(
       quantity > 1
         ? `${quantity} × ${product.name} ajoutés au panier`
@@ -70,10 +70,11 @@ export default function ProductBuyBox({ product }: { product: Product }) {
       <Button
         size="lg"
         onClick={handleAdd}
+        disabled={loading}
         className="px-8 h-12 text-xs tracking-[0.15em] uppercase w-full sm:w-auto"
         style={{ borderBottomColor: "oklch(0.28 0.05 50)" }}
       >
-        Ajouter au panier
+        {loading ? "Ajout…" : "Ajouter au panier"}
       </Button>
     </div>
   );

@@ -11,6 +11,7 @@ avec une bibliothèque d'UI partagée basée sur **shadcn/ui**.
 - **Tailwind CSS v4**
 - **shadcn/ui** — primitives partagées dans `packages/ui`
 - **Turborepo** + **pnpm workspaces**
+- **Shopify** — back-office e-commerce (produits, stocks, commandes, paiements) via Storefront API
 
 ## Démarrage
 
@@ -43,6 +44,15 @@ Ouvrir [http://localhost:4830](http://localhost:4830).
 
 Pages : Accueil, Boutique, À propos, Contact, FAQ, Mentions légales.
 
+## Variables d'environnement
+
+```env
+# apps/.env
+NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN=xxx.myshopify.com
+NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN=xxxx
+CORS_ORIGIN=http://localhost:3000
+```
+
 ## Documentation
 
 La documentation détaillée vit dans [`docs/`](./docs/) :
@@ -51,6 +61,7 @@ La documentation détaillée vit dans [`docs/`](./docs/) :
 - [Architecture](./docs/architecture.md) — monorepo, application, composants, données
 - [Conventions](./docs/conventions.md) — nommage, imports, styles
 - [Développement](./docs/développement.md) — installation, scripts, workflow
+- [Shopify](./docs/shopify-integration.md) — intégration Storefront API, types, panier, checkout
 
 ## UI partagée
 

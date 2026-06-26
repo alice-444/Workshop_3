@@ -4,7 +4,10 @@
   "scripts": {
     "dev": "next dev --port 4830",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@e-commerce/env": "workspace:*",
@@ -26,7 +29,9 @@
     "@types/node": "^26.0.0",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@vitest/ui": "^4.1.9",
     "tailwindcss": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "^4.1.9"
   }
 }

@@ -3,11 +3,11 @@
 import { toast } from "sonner";
 import { Button } from "@e-commerce/ui/components/button";
 import { useCart } from "./CartProvider";
-import type { Product } from "@/data/shop.data";
+import type { NormalizedProduct } from "@/types/shopify";
 
-export default function AddToCartButton({ product }: { product: Product }) {
+export default function AddToCartButton({ product }: { product: NormalizedProduct }) {
   const { addItem } = useCart();
-  const outOfStock = product.inStock === false;
+  const outOfStock = !product.availableForSale;
 
   function handleAdd() {
     addItem(product);

@@ -3,19 +3,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search, X, PackageOpen } from "lucide-react";
 import {
-  PRODUCTS,
   SHOP_CATEGORIES,
   SHOP_SORTS,
   type ShopCategoryId,
   type ShopSortId,
 } from "@/data/shop.data";
+import type { NormalizedProduct } from "@/types/shopify";
 import ProductCard from "@/components/product/ProductCard";
 
 type Columns = 3 | 4;
 
 const PAGE_SIZE = 8;
 
-export default function ShopClient() {
+export default function ShopClient({ products: allProducts }: { products: NormalizedProduct[] }) {
   const [category, setCategory] = useState<ShopCategoryId>("tout");
   const [sort, setSort] = useState<ShopSortId>("nouveautes");
   const [columns, setColumns] = useState<Columns>(4);
@@ -25,9 +25,9 @@ export default function ShopClient() {
 
   const products = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = PRODUCTS.filter((p) => {
+    const filtered = allProducts.filter((p) => {
       if (category !== "tout" && p.category !== category) return false;
-      if (onlyInStock && p.inStock === false) return false;
+      if (onlyInStock && !p.availableForSale) return false;
       if (q && !p.name.toLowerCase().includes(q)) return false;
       return true;
     });
@@ -36,14 +36,14 @@ export default function ShopClient() {
     if (sort === "prix-asc") sorted.sort((a, b) => a.price - b.price);
     else if (sort === "prix-desc") sorted.sort((a, b) => b.price - a.price);
     return sorted;
-  }, [category, sort, query, onlyInStock]);
+  }, [allProducts, category, sort, query, onlyInStock]);
 
   // Réinitialise le chargement progressif quand les filtres changent.
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
   }, [category, sort, query, onlyInStock]);
 
-  const outOfStockCount = products.filter((p) => p.inStock === false).length;
+  const outOfStockCount = products.filter((p) => !p.availableForSale).length;
   const visibleProducts = products.slice(0, visibleCount);
   const hasMore = visibleCount < products.length;
 
@@ -198,6 +198,7 @@ export default function ShopClient() {
         {visibleProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
+
       </div>
 
       {/* Chargement progressif */}

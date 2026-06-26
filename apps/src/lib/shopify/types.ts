@@ -17,6 +17,11 @@ export type ShopifyProductVariant = {
   price: ShopifyMoneyV2;
 };
 
+export type ShopifyMetafield = {
+  key: string;
+  value: string;
+};
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
@@ -31,29 +36,6 @@ export type ShopifyProduct = {
   };
   variants: { nodes: ShopifyProductVariant[] };
   metafields: (ShopifyMetafield | null)[];
-};
-
-export type ShopifyMetafield = {
-  key: string;
-  value: string;
-};
-
-export type NormalizedProduct = {
-  id: string;
-  handle: string;
-  name: string;
-  description: string;
-  price: number;
-  availableForSale: boolean;
-  category: string;
-  tag: string;
-  wood: string;
-  emoji: string;
-  bg: { light: string; dark: string };
-  image: string | null;
-  variantId: string;
-  rating?: number;
-  reviewCount?: number;
 };
 
 export type ShopifyCartLine = {
@@ -80,4 +62,22 @@ export type ShopifyCart = {
     subtotalAmount: ShopifyMoneyV2;
     totalAmount: ShopifyMoneyV2;
   };
+};
+
+export type NormalizedProduct = {
+  id: string;
+  handle: string;
+  name: string;
+  description: string;
+  price: number;
+  availableForSale: boolean;
+  category: string;
+  tag: string;
+  wood: string;
+  emoji: string;
+  bg: { light: string; dark: string };
+  image: string | null;
+  variantId: string;
+  rating?: number;
+  reviewCount?: number;
 };

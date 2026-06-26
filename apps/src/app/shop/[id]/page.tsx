@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import type { Route } from "next";
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import ProductCard from "@/components/product/ProductCard";
 import StarRating from "@/components/ui/StarRating";
-import { PRODUCTS, SHOP_CATEGORIES } from "@/data/shop.data";
+import { SHOP_CATEGORIES } from "@/data/shop.data";
+import { getProducts, getProduct, normalizeProduct } from "@/lib/shopify";
 import ProductBuyBox from "./ProductBuyBox";
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
@@ -14,18 +16,13 @@ const priceFormatter = new Intl.NumberFormat("fr-FR", {
   minimumFractionDigits: 0,
 });
 
-function getProduct(id: string) {
-  const numeric = Number(id);
-  if (!Number.isInteger(numeric)) return undefined;
-  return PRODUCTS.find((p) => p.id === numeric);
-}
-
 function categoryLabel(id: string) {
   return SHOP_CATEGORIES.find((c) => c.id === id)?.label ?? id;
 }
 
-export function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ id: String(p.id) }));
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.map((p) => ({ id: p.handle }));
 }
 
 export async function generateMetadata({
@@ -34,8 +31,9 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const product = getProduct(id);
-  if (!product) return { title: "Création introuvable" };
+  const raw = await getProduct(id);
+  if (!raw) return { title: "Création introuvable" };
+  const product = normalizeProduct(raw);
   return {
     title: product.name,
     description: product.description,
@@ -48,13 +46,17 @@ export default async function ProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = getProduct(id);
-  if (!product) notFound();
+  const raw = await getProduct(id);
+  if (!raw) notFound();
 
-  const outOfStock = product.inStock === false;
-  const related = PRODUCTS.filter(
-    (p) => p.category === product.category && p.id !== product.id,
-  ).slice(0, 4);
+  const product = normalizeProduct(raw);
+  const outOfStock = !product.availableForSale;
+
+  const allRaw = await getProducts();
+  const related = allRaw
+    .map(normalizeProduct)
+    .filter((p) => p.category === product.category && p.handle !== product.handle)
+    .slice(0, 4);
 
   return (
     <main className="overflow-x-hidden">
@@ -78,14 +80,24 @@ export default async function ProductPage({
               } as CSSProperties
             }
           >
-            <div
-              className={`absolute inset-0 flex items-center justify-center text-[10rem] ${outOfStock ? "grayscale opacity-40" : ""
-                }`}
-            >
-              <span role="img" aria-label={product.name}>
-                {product.emoji}
-              </span>
-            </div>
+            {product.image ? (
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                className={`object-cover ${outOfStock ? "grayscale opacity-40" : ""}`}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+              />
+            ) : (
+              <div
+                className={`absolute inset-0 flex items-center justify-center text-[10rem] ${outOfStock ? "grayscale opacity-40" : ""}`}
+              >
+                <span role="img" aria-label={product.name}>
+                  {product.emoji}
+                </span>
+              </div>
+            )}
             {outOfStock && (
               <span
                 className="absolute top-4 left-4 rounded-full bg-foreground/85 text-background px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] font-medium backdrop-blur-sm"
@@ -146,7 +158,7 @@ export default async function ProductPage({
             {/* Caractéristiques */}
             <dl className="grid grid-cols-2 gap-px rounded-2xl overflow-hidden bg-border/40 border border-border/40">
               {[
-                { label: "Essence", value: product.wood },
+                { label: "Essence", value: product.wood || "—" },
                 { label: "Catégorie", value: categoryLabel(product.category) },
                 { label: "Finition", value: "Huile & cire naturelles" },
                 {

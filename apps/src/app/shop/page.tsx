@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { Route } from "next";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import ShopClient from "./ShopClient";
+import { getProducts, normalizeProduct } from "@/lib/shopify";
 
 export const metadata: Metadata = {
     title: "Boutique",
@@ -9,7 +10,9 @@ export const metadata: Metadata = {
         "Découvrez toutes nos créations artisanales en bois : décoration, mobilier, objets de cuisine et sculptures, façonnés à la main dans des bois nobles.",
 };
 
-export default function ShopPage() {
+export default async function ShopPage() {
+    const raw = await getProducts();
+    const products = raw.map(normalizeProduct);
     return (
         <main className="overflow-x-hidden">
             <section className="max-w-6xl mx-auto px-6 pt-12 pb-24">
@@ -46,7 +49,7 @@ export default function ShopPage() {
                     </p>
                 </header>
 
-                <ShopClient />
+                <ShopClient products={products} />
             </section>
         </main>
     );

@@ -8,13 +8,15 @@ import {
   useMemo,
   useState,
 } from "react";
-import type { Product } from "@/data/shop.data";
+import type { NormalizedProduct } from "@/types/shopify";
 
 export type CartItem = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   emoji: string;
+  image: string | null;
+  variantId: string;
   quantity: number;
 };
 
@@ -22,9 +24,9 @@ type CartContextValue = {
   items: CartItem[];
   itemCount: number;
   subtotal: number;
-  addItem: (product: Product, quantity?: number) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addItem: (product: NormalizedProduct, quantity?: number) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clear: () => void;
 };
 
@@ -54,7 +56,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items]);
 
-  const addItem = useCallback((product: Product, quantity = 1) => {
+  const addItem = useCallback((product: NormalizedProduct, quantity = 1) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === product.id);
       if (existing) {
@@ -69,17 +71,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           name: product.name,
           price: product.price,
           emoji: product.emoji,
+          image: product.image,
+          variantId: product.variantId,
           quantity,
         },
       ];
     });
   }, []);
 
-  const removeItem = useCallback((id: number) => {
+  const removeItem = useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
-  const updateQuantity = useCallback((id: number, quantity: number) => {
+  const updateQuantity = useCallback((id: string, quantity: number) => {
     setItems((prev) =>
       quantity <= 0
         ? prev.filter((i) => i.id !== id)

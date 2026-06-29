@@ -1,4 +1,4 @@
-const WOODS = "Chêne · Noyer · Frêne · Merisier · Hêtre · Peuplier · Orme · Bois local";
+const WOODS = "Contre plaqué de 5mm · Meranti";
 
 export default function MarqueeBand() {
   return (

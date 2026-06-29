@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import type { Route } from "next";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -23,34 +24,27 @@ export default function Header() {
     <header className="sticky top-0 z-50 pointer-events-none">
       {/* Bandeau supérieur */}
       <div className="pointer-events-auto bg-primary text-primary-foreground text-center py-1.5 text-xs tracking-[0.2em] uppercase font-light" style={{ fontFamily: "var(--font-body)" }}>
-        Livraison soignée · Pièces uniques · Bois local
+        Livraison soignée · Pièces uniques
       </div>
 
       <div className="px-4 pt-3 pb-2">
         <div className="max-w-5xl mx-auto pointer-events-auto">
-          <div className="flex items-center justify-between gap-6 bg-background/80 backdrop-blur-md border border-border/60 rounded-full px-5 py-3 shadow-sm">
+          <div className="flex items-center justify-between gap-6 bg-background/80 backdrop-blur-md border border-border/60 rounded-full px-6 py-5 shadow-sm">
 
             {/* Logo / Marque */}
             <Link
               href="/"
-              className="group flex items-center gap-3 no-underline shrink-0"
+              className="group flex items-center no-underline shrink-0"
               aria-label="Animal-Totem — Retour à l'accueil"
             >
-              <div className="relative w-8 h-8 flex items-center justify-center">
-                <div className="absolute inset-0 bg-primary/10 rotate-45 rounded-sm group-hover:bg-primary/20 transition-colors duration-300" />
-                <span className="relative text-base select-none" aria-hidden="true">🪵</span>
-              </div>
-              <div className="flex flex-col leading-none">
-                <span
-                  className="text-xl font-semibold tracking-wide text-foreground group-hover:text-primary transition-colors duration-300"
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  Animal-Totem
-                </span>
-                <span className="text-[8px] uppercase tracking-[0.3em] text-muted-foreground font-light mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
-                  Artisan créateur
-                </span>
-              </div>
+              <Image
+                src="/logo/logo_navbar.png"
+                alt="Animal-Totem"
+                width={170}
+                height={40}
+                priority
+                className="h-9 w-auto select-none transition-transform duration-300 group-hover:-translate-y-0.5"
+              />
             </Link>
 
             {/* Navigation centrale — desktop */}

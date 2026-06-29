@@ -20,8 +20,8 @@
   },
   "devDependencies": {
     "@e-commerce/config": "workspace:*",
-    "@types/node": "^26.0.0",
-    "turbo": "^2.9.18",
+    "@types/node": "^26.0.1",
+    "turbo": "^2.10.0",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@11.5.1"

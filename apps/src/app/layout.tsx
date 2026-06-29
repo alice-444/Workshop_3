@@ -1,32 +1,70 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Lora, Nunito } from "next/font/google";
 
 import "../index.css";
 import BackToTop from "@/components/layout/BackToTop";
+import CookieConsent from "@/components/layout/CookieConsent";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Providers from "@/components/providers/Providers";
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/lib/site";
 
-// Serif élégante pour les titres — caractère librairie ancienne, artisanal
-const cormorantGaramond = Cormorant_Garamond({
+// Serif des titres — Lora (charte typographique)
+const lora = Lora({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 
-// Sans-serif géométrique lisible pour le corps — moderne mais sobre
-const jost = Jost({
+// Sans-serif du corps — Nunito (charte typographique)
+const nunito = Nunito({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Bois & Art — Décorations en bois faites main",
-  description:
-    "Créations artisanales uniques en bois local : sculptures, cadres, objets décoratifs façonnés à la main avec soin. Chaque pièce est une oeuvre, taillée pour durer.",
-  keywords: ["bois", "artisanat", "décorations", "fait main", "sculptures", "cadres bois", "artisan"],
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Animal-Totem — Décorations en bois faites main",
+    template: "%s · Animal-Totem",
+  },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "Animal-Totem",
+    "décoration en bois",
+    "artisanat bois",
+    "fait main",
+    "sculptures bois",
+    "mobilier bois",
+    "pièce unique",
+    "sur-mesure",
+    "bois local",
+  ],
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "Animal-Totem — Décorations en bois faites main",
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Animal-Totem — Décorations en bois faites main",
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({
@@ -36,7 +74,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={`${cormorantGaramond.variable} ${jost.variable} antialiased`}>
+      <body className={`${lora.variable} ${nunito.variable} antialiased`}>
         <Providers>
           <div className="grid grid-rows-[auto_1fr_auto] min-h-svh">
             <Header />
@@ -44,6 +82,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <BackToTop />
+          <CookieConsent />
         </Providers>
       </body>
     </html>

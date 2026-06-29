@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Route } from "next";
 import { Button } from "@e-commerce/ui/components/button";
 
@@ -7,12 +8,6 @@ const SERVICES = [
     id: "sur-mesure",
     title: "Créations\nSur-mesure",
     description: "Donnez vie à vos idées. Nous concevons et fabriquons des pièces uniques en bois, adaptées à votre intérieur et à vos envies. Chaque création est une histoire.",
-    steps: [
-      "Échange autour de votre projet : usage, dimensions, essence et budget.",
-      "Croquis et choix du bois, validés ensemble avant la moindre découpe.",
-      "Fabrication entièrement à la main, finitions naturelles à l'huile et à la cire.",
-      "Livraison soignée et conseils d'entretien pour faire durer la pièce.",
-    ],
     meta: [
       { label: "Délai", value: "3 à 6 semaines" },
       { label: "Sur devis", value: "dès 80 €" },
@@ -21,25 +16,20 @@ const SERVICES = [
     href: "/shop" as Route,
     cta2: "Demander un devis",
     href2: "/contact" as Route,
-    emoji: "🪵",
     visualBgClass: "bg-[oklch(0.88_0.06_68)] dark:bg-[oklch(0.28_0.04_62)]",
     patternColor: "oklch(0.42 0.07 55)",
     patternDir: "45deg",
     patternAnimation: "patternDriftIn 18s linear infinite",
     btnBg: "oklch(0.22 0.04 245)",
     btnBorder: "oklch(0.14 0.03 245)",
+    image: "/sur-mesure.png",
+    imageAlt: "Artisane façonnant une pièce en bois sur-mesure",
     reverse: false,
   },
   {
     id: "ateliers",
     title: "Ateliers\nCréatifs",
     description: "Éveillez leur imagination. Des moments ludiques où les enfants découvrent le plaisir de créer de leurs propres mains. Un espace d'expression pour expérimenter et s'amuser.",
-    steps: [
-      "Petits groupes encadrés, pour une vraie attention à chaque participant.",
-      "Outils adaptés et bois préparé : on crée en toute sécurité, dès 6 ans.",
-      "Un projet à réaliser et à emporter à la fin de chaque séance.",
-      "Formules anniversaire, scolaires ou entre amis sur demande.",
-    ],
     meta: [
       { label: "Durée", value: "2 h / séance" },
       { label: "Tarif", value: "35 € / pers." },
@@ -48,13 +38,14 @@ const SERVICES = [
     href: "/shop" as Route,
     cta2: "Réserver une séance",
     href2: "/contact" as Route,
-    emoji: "🎨",
     visualBgClass: "bg-[oklch(0.90_0.06_290)] dark:bg-[oklch(0.26_0.06_290)]",
     patternColor: "oklch(0.45 0.18 280)",
     patternDir: "-45deg",
     patternAnimation: "patternDriftOut 18s linear infinite",
     btnBg: "oklch(0.45 0.18 280)",
     btnBorder: "oklch(0.32 0.16 280)",
+    image: "/ateliers.png",
+    imageAlt: "Atelier créatif : création à la main",
     reverse: true,
   },
 ];
@@ -75,7 +66,7 @@ export default function ServicesSection() {
 
       <div className="relative max-w-5xl mx-auto px-6 flex flex-col gap-6">
 
-        <div className="mb-2">
+        <div className="mb-2 text-center">
           <h2
             className="text-5xl md:text-6xl font-light text-foreground leading-tight"
             style={{ fontFamily: "var(--font-heading)" }}
@@ -90,16 +81,24 @@ export default function ServicesSection() {
 
               {/* Visuel */}
               <div
-                className={`relative min-h-52 rounded-3xl flex items-center justify-center text-6xl overflow-hidden ${service.visualBgClass} ${service.reverse ? "order-1 md:order-2" : ""}`}
+                className={`group min-h-52 self-stretch rounded-3xl p-3 ${service.visualBgClass} ${service.reverse ? "order-1 md:order-2" : ""}`}
               >
-                <div
-                  className="absolute inset-0 opacity-[0.18] pointer-events-none"
-                  style={{
-                    backgroundImage: `repeating-linear-gradient(${service.patternDir}, ${service.patternColor} 0px, ${service.patternColor} 1px, transparent 1px, transparent 10px)`,
-                    animation: service.patternAnimation,
-                  }}
-                />
-                <span className="relative drop-shadow-lg select-none text-6xl" aria-hidden="true">{service.emoji}</span>
+                <div className="relative h-full min-h-44 w-full overflow-hidden rounded-2xl bg-muted">
+                  <div
+                    className="absolute inset-0 opacity-[0.18] pointer-events-none z-10"
+                    style={{
+                      backgroundImage: `repeating-linear-gradient(${service.patternDir}, ${service.patternColor} 0px, ${service.patternColor} 1px, transparent 1px, transparent 10px)`,
+                      animation: service.patternAnimation,
+                    }}
+                  />
+                  <Image
+                    src={service.image}
+                    alt={service.imageAlt}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
               </div>
 
               {/* Contenu */}
@@ -118,18 +117,6 @@ export default function ServicesSection() {
 
                 {/* Étapes / ce qui est inclus */}
                 <ul className="flex flex-col gap-2.5" style={{ fontFamily: "var(--font-body)" }}>
-                  {service.steps.map((step) => (
-                    <li key={step} className="flex items-start gap-3 text-sm text-foreground/80 leading-relaxed">
-                      <span
-                        className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] text-white"
-                        style={{ background: service.btnBg }}
-                        aria-hidden="true"
-                      >
-                        ✓
-                      </span>
-                      <span>{step}</span>
-                    </li>
-                  ))}
                 </ul>
 
                 {/* Repères pratiques */}

@@ -3,7 +3,6 @@ export const FAQ_TABS = [
   { id: "livraison", label: "Livraison" },
   { id: "retours", label: "Retours" },
   { id: "paiement", label: "Paiement" },
-  { id: "compte", label: "Mon compte" },
 ] as const;
 
 export type FaqTabId = (typeof FAQ_TABS)[number]["id"];
@@ -77,23 +76,6 @@ export const FAQ_CONTENT: Record<FaqTabId, FaqItem[]> = {
       question: "Puis-je payer en plusieurs fois ?",
       answer:
         "Le paiement en 3 ou 4 fois sans frais est disponible via Alma pour les commandes supérieures à 100 €.",
-    },
-  ],
-  compte: [
-    {
-      question: "Comment créer un compte ?",
-      answer:
-        "Cliquez sur « Connexion » puis « Créer un compte ». Renseignez votre e-mail et un mot de passe. Un e-mail de confirmation vous sera envoyé.",
-    },
-    {
-      question: "J'ai oublié mon mot de passe, que faire ?",
-      answer:
-        "Cliquez sur « Mot de passe oublié » sur la page de connexion, saisissez votre e-mail et suivez les instructions reçues.",
-    },
-    {
-      question: "Comment supprimer mon compte ?",
-      answer:
-        "Rendez-vous dans « Paramètres du compte » puis « Supprimer mon compte ». Cette action est irréversible et supprime toutes vos données.",
     },
   ],
 };

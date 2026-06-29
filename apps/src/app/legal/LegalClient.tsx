@@ -5,8 +5,12 @@ import { type TabId } from "@/data/legal.data";
 import LegalTabs from "@/components/legal/LegalTabs";
 import LegalContent from "@/components/legal/LegalContent";
 
-export default function LegalClient() {
-    const [active, setActive] = useState<TabId>("cgv");
+export default function LegalClient({
+    initialTab = "cgv",
+}: {
+    initialTab?: TabId;
+}) {
+    const [active, setActive] = useState<TabId>(initialTab);
 
     return (
         <div className="container mx-auto max-w-4xl px-4 py-10">

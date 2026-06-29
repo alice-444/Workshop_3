@@ -32,9 +32,27 @@ export async function generateMetadata({
   const raw = await getProduct(id);
   if (!raw) return { title: "Création introuvable" };
   const product = normalizeProduct(raw);
+  const url = `/shop/${product.handle}`;
+  const images = product.image
+    ? [{ url: product.image, alt: product.name }]
+    : undefined;
   return {
     title: product.name,
     description: product.description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      title: product.name,
+      description: product.description,
+      url,
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description,
+      images: product.image ? [product.image] : undefined,
+    },
   };
 }
 

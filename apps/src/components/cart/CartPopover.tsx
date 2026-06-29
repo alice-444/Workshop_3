@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import type { Route } from "next";
-import { ShoppingBag, X, ArrowRight, Minus, Plus, Trash2 } from "lucide-react";
+import { ShoppingBag, X, ImageIcon, Minus, Plus } from "lucide-react";
 import { Button } from "@e-commerce/ui/components/button";
 import { useCart } from "./CartProvider";
 
@@ -17,32 +18,27 @@ const priceFormatter = new Intl.NumberFormat("fr-FR", {
 export default function CartPopover() {
   const { items, itemCount, subtotal, checkoutUrl, loading, updateQuantity, removeItem } = useCart();
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
+  // Fermeture au clavier (Échap) + verrouillage du scroll de fond
   useEffect(() => {
     if (!open) return;
-    function handleClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
     function handleEscape(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
     }
-    document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = prevOverflow;
     };
   }, [open]);
 
   return (
-    <div ref={containerRef} className="relative">
-
+    <>
       {/* Trigger */}
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(true)}
         aria-label={`Panier — ${itemCount} article${itemCount !== 1 ? "s" : ""}`}
         aria-expanded={open}
         className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -57,182 +53,183 @@ export default function CartPopover() {
         )}
       </button>
 
-      {/* Popover */}
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Panier"
-          className="absolute right-0 top-full mt-3 w-80 rounded-2xl border border-border/50 bg-background/98 backdrop-blur-xl shadow-2xl z-50 animate-in fade-in-0 zoom-in-95 duration-200 origin-top-right overflow-hidden"
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-border/40">
-            <div className="flex items-center gap-2.5">
-              <ShoppingBag size={14} className="text-primary" />
-              <h2
-                className="text-sm font-semibold text-foreground tracking-wide"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                Mon panier
-              </h2>
-              {itemCount > 0 && (
-                <span className="text-[10px] text-muted-foreground" style={{ fontFamily: "var(--font-body)" }}>
-                  {itemCount} article{itemCount !== 1 ? "s" : ""}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="Fermer le panier"
-              className="p-1 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-all duration-150"
-            >
-              <X size={13} />
-            </button>
-          </div>
+      {open && createPortal(
+        <>
+          {/* Fond assombri */}
+          <div
+            className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-[1px] animate-in fade-in-0 duration-200"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
+          />
 
-          {/* État vide */}
-          {itemCount === 0 && (
-            <div className="flex flex-col items-center gap-5 px-6 py-8 text-center">
-
-              {/* Illustration */}
-              <div className="relative w-20 h-20">
-                <div className="absolute inset-0 rounded-2xl opacity-60 bg-[oklch(0.93_0.02_72)] dark:bg-[oklch(0.28_0.025_62)]" />
-                <div className="absolute inset-0 rounded-2xl rotate-6 opacity-30 bg-[oklch(0.87_0.04_68)] dark:bg-[oklch(0.24_0.03_62)]" />
-                <div className="relative w-full h-full flex items-center justify-center text-3xl select-none">
-                  🛒
-                </div>
-              </div>
-
-              {/* Texte */}
-              <div className="flex flex-col gap-1.5">
-                <p
-                  className="text-sm font-semibold text-foreground"
+          {/* Tiroir latéral */}
+          <aside
+            role="dialog"
+            aria-label="Panier"
+            aria-modal="true"
+            className="fixed right-0 top-0 z-50 flex h-dvh w-full max-w-md flex-col bg-background shadow-2xl animate-in slide-in-from-right duration-300"
+          >
+            {/* Header */}
+            <div className="px-6 pt-5 pb-4">
+              <div className="flex items-center justify-between gap-4">
+                <h2
+                  className="text-3xl font-normal text-foreground"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  Votre panier est vide
-                </p>
-                <p
-                  className="text-[11px] text-muted-foreground leading-relaxed"
-                  style={{ fontFamily: "var(--font-body)" }}
+                  Mon panier
+                </h2>
+                <button
+                  onClick={() => setOpen(false)}
+                  aria-label="Fermer le panier"
+                  className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-150"
                 >
-                  Explorez nos créations artisanales<br />en bois, façonnées à la main.
-                </p>
+                  <X size={22} />
+                </button>
               </div>
-
-              {/* CTA */}
-              <Link href={"/shop" as Route} onClick={() => setOpen(false)}>
-                <Button size="sm" className="gap-2 px-5 text-[11px] tracking-[0.1em] uppercase group">
-                  Voir la boutique
-                  <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
-                </Button>
-              </Link>
+              <div className="mt-4 border-b border-foreground/20" />
             </div>
-          )}
 
-          {/* Panier rempli */}
-          {itemCount > 0 && (
-            <>
-              <ul className="max-h-72 overflow-y-auto py-2 list-none">
-                {items.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-muted/40 transition-colors"
-                  >
-                    {/* Vignette */}
-                    <div className="w-11 h-11 shrink-0 rounded-lg overflow-hidden bg-[oklch(0.93_0.02_72)] dark:bg-[oklch(0.26_0.025_58)] flex items-center justify-center text-xl">
-                      {item.image ? (
-                        <Image src={item.image} alt={item.name} width={44} height={44} className="object-cover w-full h-full" />
-                      ) : (
-                        <span role="img" aria-hidden="true">{item.emoji}</span>
-                      )}
-                    </div>
+            {/* État vide */}
+            {itemCount === 0 ? (
+              <div className="flex flex-1 flex-col items-center justify-center gap-8 px-6 text-center">
+                <p
+                  className="text-lg text-foreground"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  Votre panier est actuellement vide.
+                </p>
+                <Link href={"/shop" as Route} onClick={() => setOpen(false)}>
+                  <Button size="lg" className="px-8 h-12 text-xs tracking-[0.15em] uppercase">
+                    Découvrir la collection
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <>
+                {/* Liste des articles */}
+                <ul className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4 list-none">
+                  {items.map((item) => (
+                    <li
+                      key={item.id}
+                      className="flex gap-4 rounded-xl bg-muted/40 overflow-hidden"
+                    >
+                      {/* Vignette */}
+                      <div className="relative w-28 shrink-0 self-stretch bg-muted flex items-center justify-center text-muted-foreground">
+                        {item.image ? (
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fill
+                            className="object-cover"
+                            sizes="112px"
+                          />
+                        ) : item.emoji ? (
+                          <span className="text-3xl" role="img" aria-hidden="true">{item.emoji}</span>
+                        ) : (
+                          <ImageIcon size={28} aria-hidden="true" />
+                        )}
+                      </div>
 
-                    {/* Infos */}
-                    <div className="flex-1 min-w-0">
-                      <p
-                        className="text-xs font-medium text-foreground truncate"
-                        style={{ fontFamily: "var(--font-heading)" }}
-                      >
-                        {item.name}
-                      </p>
-                      <p
-                        className="text-[11px] text-muted-foreground"
-                        style={{ fontFamily: "var(--font-body)" }}
-                      >
-                        {priceFormatter.format(item.price)}
-                      </p>
+                      {/* Infos */}
+                      <div className="flex flex-1 flex-col gap-2 py-3 pr-4 min-w-0">
+                        {/* Label + prix */}
+                        <div className="flex items-start justify-between gap-3">
+                          <p
+                            className="text-sm font-medium text-foreground"
+                            style={{ fontFamily: "var(--font-heading)" }}
+                          >
+                            {item.name}
+                          </p>
+                          <p
+                            className="text-sm text-foreground whitespace-nowrap"
+                            style={{ fontFamily: "var(--font-body)" }}
+                          >
+                            {priceFormatter.format(item.price)}
+                          </p>
+                        </div>
 
-                      {/* Contrôle quantité */}
-                      <div className="flex items-center gap-1.5 mt-1.5">
+                        {/* Quantité */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateQuantity(item.lineId, item.quantity - 1)}
+                            disabled={loading}
+                            aria-label={`Réduire la quantité de ${item.name}`}
+                            className="w-6 h-6 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-40"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span className="text-sm tabular-nums w-6 text-center text-foreground" aria-live="polite">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.lineId, item.quantity + 1)}
+                            disabled={loading}
+                            aria-label={`Augmenter la quantité de ${item.name}`}
+                            className="w-6 h-6 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-40"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
+
+                        {/* Supprimer */}
                         <button
-                          onClick={() => updateQuantity(item.lineId, item.quantity - 1)}
-                          disabled={loading}
-                          aria-label={`Réduire la quantité de ${item.name}`}
-                          className="w-5 h-5 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-40"
+                          onClick={() => removeItem(item.lineId)}
+                          aria-label={`Retirer ${item.name} du panier`}
+                          className="self-start text-xs text-muted-foreground hover:text-destructive transition-colors underline underline-offset-2"
+                          style={{ fontFamily: "var(--font-body)" }}
                         >
-                          <Minus size={11} />
-                        </button>
-                        <span
-                          className="text-[11px] tabular-nums w-5 text-center text-foreground"
-                          aria-live="polite"
-                        >
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.lineId, item.quantity + 1)}
-                          disabled={loading}
-                          aria-label={`Augmenter la quantité de ${item.name}`}
-                          className="w-5 h-5 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-40"
-                        >
-                          <Plus size={11} />
+                          Supprimer
                         </button>
                       </div>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Pied : total + payer */}
+                <div className="px-6 pb-5 flex flex-col gap-4">
+                  <div className="border-t border-foreground/20" />
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="text-sm text-muted-foreground"
+                        style={{ fontFamily: "var(--font-body)" }}
+                      >
+                        Sous-total
+                      </span>
+                      <span
+                        className="text-lg font-semibold text-foreground"
+                        style={{ fontFamily: "var(--font-heading)" }}
+                      >
+                        {priceFormatter.format(subtotal)}
+                      </span>
                     </div>
-
-                    {/* Supprimer */}
-                    <button
-                      onClick={() => removeItem(item.lineId)}
-                      aria-label={`Retirer ${item.name} du panier`}
-                      className="p-1.5 rounded-full text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors self-start"
+                    <p
+                      className="text-[11px] text-muted-foreground/70"
+                      style={{ fontFamily: "var(--font-body)" }}
                     >
-                      <Trash2 size={13} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Pied : total + commander */}
-              <div className="border-t border-border/40 px-5 py-4 flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span
-                    className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
-                    style={{ fontFamily: "var(--font-body)" }}
-                  >
-                    Sous-total
-                  </span>
-                  <span
-                    className="text-base font-semibold text-foreground"
-                    style={{ fontFamily: "var(--font-heading)" }}
-                  >
-                    {priceFormatter.format(subtotal)}
-                  </span>
+                      Frais de livraison calculés au paiement.
+                    </p>
+                  </div>
+                  <div className="flex justify-end">
+                    {checkoutUrl ? (
+                      <a href={checkoutUrl} onClick={() => setOpen(false)}>
+                        <Button size="lg" className="px-10 h-12 text-xs tracking-[0.15em] uppercase">
+                          Payer
+                        </Button>
+                      </a>
+                    ) : (
+                      <Button size="lg" disabled className="px-10 h-12 text-xs tracking-[0.15em] uppercase">
+                        Payer
+                      </Button>
+                    )}
+                  </div>
                 </div>
-                {checkoutUrl ? (
-                  <a href={checkoutUrl} onClick={() => setOpen(false)}>
-                    <Button size="sm" className="w-full gap-2 text-[11px] tracking-[0.1em] uppercase group">
-                      Commander
-                      <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
-                    </Button>
-                  </a>
-                ) : (
-                  <Button size="sm" disabled className="w-full gap-2 text-[11px] tracking-[0.1em] uppercase">
-                    Commander
-                  </Button>
-                )}
-              </div>
-            </>
-          )}
-        </div>
+              </>
+            )}
+          </aside>
+        </>,
+        document.body,
       )}
-    </div>
+    </>
   );
 }

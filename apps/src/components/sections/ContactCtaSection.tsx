@@ -51,11 +51,13 @@ export default function ContactCtaSection() {
         {/* Cartes images */}
         <div className="grid sm:grid-cols-3 gap-5 w-full">
           {CARDS.map((card) => (
-            <div
+            <Link
               key={card.id}
-              className={`group rounded-3xl p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${card.bgClass}`}
+              href={"/contact" as Route}
+              aria-label={card.title}
+              className={`group block no-underline rounded-3xl p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${card.bgClass}`}
             >
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted">
+              <div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-muted">
                 <Image
                   src={card.src}
                   alt={card.alt}
@@ -73,7 +75,7 @@ export default function ContactCtaSection() {
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -83,7 +85,7 @@ export default function ContactCtaSection() {
             size="lg"
             className="px-8 h-12 text-xs tracking-[0.15em] uppercase"
           >
-            As-tu une question ?
+            Tu as une question ?
           </Button>
         </Link>
 

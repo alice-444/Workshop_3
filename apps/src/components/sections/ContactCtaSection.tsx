@@ -1,27 +1,28 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Route } from "next";
 import { Button } from "@e-commerce/ui/components/button";
 
 const CARDS = [
   {
-    id: "sur-mesure",
-    emoji: "🪵",
+    id: "image1",
+    src: "/image1.png",
+    alt: "Pots de peinture dans l'atelier",
     title: "Une création sur-mesure",
-    description: "Vous avez un projet en tête ? Décrivez-le nous et nous vous proposerons une solution adaptée.",
     bgClass: "bg-[oklch(0.91_0.025_72)] dark:bg-[oklch(0.26_0.025_62)]",
   },
   {
-    id: "ateliers",
-    emoji: "🎨",
+    id: "image2",
+    src: "/image2.png",
+    alt: "Choix des couleurs dans la boîte de pastels",
     title: "Réserver un atelier",
-    description: "Envie d'une expérience créative ? Nos ateliers sont ouverts aux débutants comme aux passionnés.",
     bgClass: "bg-[oklch(0.91_0.03_290)] dark:bg-[oklch(0.26_0.04_285)]",
   },
   {
-    id: "devis",
-    emoji: "📐",
+    id: "image3",
+    src: "/image3.png",
+    alt: "Dessin à la main en cours de création",
     title: "Obtenir un devis",
-    description: "Pour tout projet professionnel ou événementiel, nous établissons un devis personnalisé sous 48h.",
     bgClass: "bg-[oklch(0.91_0.018_235)] dark:bg-[oklch(0.24_0.02_240)]",
   },
 ];
@@ -37,36 +38,41 @@ export default function ContactCtaSection() {
             className="text-5xl md:text-6xl font-light text-foreground leading-tight"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Vous souhaitez en savoir plus ?
+            Tu souhaites en savoir plus ?
           </h2>
           <p
             className="text-base text-muted-foreground leading-relaxed"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            Une envie particulière ou une question sur nos ateliers ? Nous sommes à votre écoute.
+            Une envie particulière ou une question sur mes ateliers ? Je suis à ton écoute.
           </p>
         </div>
 
-        {/* Cartes */}
+        {/* Cartes images */}
         <div className="grid sm:grid-cols-3 gap-5 w-full">
           {CARDS.map((card) => (
             <div
               key={card.id}
-              className={`relative rounded-2xl p-6 flex flex-col gap-3 min-h-52 ${card.bgClass}`}
+              className={`group rounded-3xl p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${card.bgClass}`}
             >
-              <span className="text-3xl select-none" aria-hidden="true">{card.emoji}</span>
-              <h3
-                className="text-lg font-semibold text-foreground leading-snug"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                {card.title}
-              </h3>
-              <p
-                className="text-sm text-muted-foreground leading-relaxed"
-                style={{ fontFamily: "var(--font-body)" }}
-              >
-                {card.description}
-              </p>
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted">
+                <Image
+                  src={card.src}
+                  alt={card.alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                />
+                {/* Overlay nom du service au survol */}
+                <div className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors duration-300 group-hover:bg-foreground/45">
+                  <span
+                    className="px-4 text-center text-lg font-semibold text-background opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0"
+                    style={{ fontFamily: "var(--font-heading)" }}
+                  >
+                    {card.title}
+                  </span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -77,7 +83,7 @@ export default function ContactCtaSection() {
             size="lg"
             className="px-8 h-12 text-xs tracking-[0.15em] uppercase"
           >
-            Avez-vous une question ?
+            As-tu une question ?
           </Button>
         </Link>
 

@@ -1,12 +1,16 @@
 # Fonctionnalités
 
-Vue d'ensemble des fonctionnalités du site, par domaine. Le site fonctionne
-**sans backend** : les données sont statiques (`apps/src/data/`) et les actions
-sensibles (paiement, envoi d'e-mail) sont simulées côté client.
+Vue d'ensemble des fonctionnalités du site, par domaine. Le site est **headless** :
+le catalogue, le panier et les paiements sont portés par **Shopify** (Storefront
+API), consommés via la couche `@/lib/shopify`. Le contenu éditorial (FAQ,
+mentions légales) reste statique et typé (`apps/src/data/`). Seul l'**envoi
+d'e-mail du formulaire de contact** est simulé côté client (pas de backend mail).
 
 ## Boutique (`/shop`)
 
-- **Catalogue** de produits issus de `shop.data.ts`.
+- **Catalogue dynamique** : produits récupérés depuis **Shopify** via
+  `getProducts()` puis normalisés (`normalizeProduct`). La page `shop/page.tsx`
+  (Server Component) fait le fetch et passe les produits à `ShopClient`.
 - **Recherche** par nom de création (champ avec effacement rapide).
 - **Filtre par catégorie** (onglets).
 - **Filtre par disponibilité** (bascule « En stock »).
@@ -40,10 +44,10 @@ flowchart LR
 
 ## Page produit (`/shop/[id]`)
 
-- Route **dynamique**, une fiche par produit.
+- Route **dynamique**, une fiche par produit (données **Shopify**).
 - Pré-génération statique (`generateStaticParams`) et **métadonnées par
   produit** (`generateMetadata` : titre + description).
-- **404** (`notFound()`) si l'identifiant est inconnu ou non numérique.
+- **404** (`notFound()`) si le `handle` produit est inconnu.
 - Contenu : grand visuel, tag, catégorie, **note étoilée**, prix, description,
   tableau de **caractéristiques** (essence, catégorie, finition, disponibilité).
 - **Sélecteur de quantité** + ajout au panier (`ProductBuyBox`) ; bouton
@@ -55,29 +59,37 @@ flowchart LR
 
 ## Panier
 
-- État global via **contexte React** (`CartProvider` / `useCart`).
-- **Persistance** dans `localStorage` (le panier survit au rechargement).
-- Actions : `addItem`, `removeItem`, `updateQuantity`, `clear`.
-- Valeurs dérivées : `itemCount`, `subtotal`.
+- État global via **contexte React** (`CartProvider` / `useCart`), branché sur
+  la **Cart API Shopify**.
+- **Persistance** du `cartId` et du `checkoutUrl` dans `localStorage`
+  (`shopify_cart_id` / `shopify_cart_url`) ; au montage, le panier est rechargé
+  via `getCart()` et **régénéré s'il a expiré**.
+- Actions (asynchrones, mutations Shopify) : `addItem`, `removeItem`,
+  `updateQuantity`, `clear`.
+- Valeurs dérivées : `itemCount`, `subtotal` ; état `loading`.
 - **`CartPopover`** dans le header : aperçu des articles et sous-total.
-- ⚠️ Pas de tunnel de paiement (démonstration).
+- ✅ **Checkout réel délégué à Shopify** : « Commander » redirige vers le
+  `checkoutUrl` (paiement sécurisé PCI-DSS géré par Shopify).
 
 > `components/cart/CartProvider.tsx`, `CartPopover.tsx`, `AddToCartButton.tsx`.
 
-Parcours d'ajout au panier :
+Parcours d'ajout au panier (mutations Shopify) :
 
 ```mermaid
 sequenceDiagram
     actor U as Utilisateur
     participant B as Bouton (carte / fiche)
     participant C as CartProvider
-    participant L as localStorage
+    participant S as Shopify Cart API
     participant T as Toast (sonner)
 
     U->>B: Clic « Ajouter »
     B->>C: addItem(produit, quantité)
-    C->>C: met à jour les articles
-    C->>L: persiste (useEffect)
+    C->>S: createCart() si pas de cartId
+    S-->>C: cartId + checkoutUrl
+    C->>S: addToCart(variantId, quantité)
+    S-->>C: panier mis à jour
+    C->>C: items, itemCount, subtotal
     B->>T: notification de succès
 ```
 
@@ -113,14 +125,15 @@ sequenceDiagram
 ## Accueil (`/`)
 
 Composée de sections réutilisables : `HeroSection`,
-`FeaturedProductsSection`, `ServicesSection`, `ContactCtaSection`,
-`MarqueeBand`.
+`CollectionSection` (met en avant des produits **Shopify**), `ServicesSection`,
+`ContactCtaSection`, `MarqueeBand`.
 
 ## Transversal
 
 - **Thème clair / sombre** via `next-themes` (`ModeToggle` dans le header).
 - **Header responsive** avec menu mobile.
 - **Bouton « retour en haut »** (`BackToTop`).
+- **Consentement cookies RGPD** (`CookieConsent`) dans le layout racine.
 - **États de route** : chargement (`loading.tsx`), erreur (`error.tsx`),
   page 404 (`not-found.tsx`).
 - **Design responsive** mobile-first (voir [conventions](./conventions.md#styles)).

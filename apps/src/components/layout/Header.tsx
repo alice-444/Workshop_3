@@ -23,13 +23,13 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 pointer-events-none">
       {/* Bandeau supérieur */}
-      <div className="pointer-events-auto bg-primary text-primary-foreground text-center py-1.5 text-xs tracking-[0.2em] uppercase font-light" style={{ fontFamily: "var(--font-body)" }}>
+      <div className="pointer-events-auto bg-secondary text-secondary-foreground text-center py-1.5 text-xs tracking-[0.2em] uppercase font-light" style={{ fontFamily: "var(--font-body)" }}>
         Livraison soignée · Pièces uniques
       </div>
 
       <div className="px-4 pt-3 pb-2">
-        <div className="max-w-5xl mx-auto pointer-events-auto">
-          <div className="flex items-center justify-between gap-6 bg-background/80 backdrop-blur-md border border-border/60 rounded-full px-6 py-5 shadow-sm">
+        <div className="w-full pointer-events-auto">
+          <div className="flex items-center justify-between gap-6 bg-accent text-accent-foreground rounded-lg px-6 py-5">
 
             {/* Logo / Marque */}
             <Link
@@ -57,10 +57,10 @@ export default function Header() {
                       <Link
                         href={to}
                         className={[
-                          "relative px-3 py-1.5 text-[11px] uppercase tracking-[0.15em] font-medium transition-all duration-200 no-underline block rounded-full",
+                          "relative px-3 py-1.5 text-[11px] uppercase tracking-[0.15em] font-medium transition-all duration-200 block rounded-lg underline-offset-4",
                           isActive
-                            ? "text-primary bg-primary/8"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted/60",
+                            ? "text-accent-foreground underline"
+                            : "text-accent-foreground/75 hover:text-accent-foreground no-underline hover:underline",
                         ].join(" ")}
                         style={{ fontFamily: "var(--font-body)" }}
                       >
@@ -81,7 +81,7 @@ export default function Header() {
                 onClick={() => setMenuOpen((v) => !v)}
                 aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
                 aria-expanded={menuOpen}
-                className="md:hidden flex items-center justify-center w-9 h-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-200"
+                className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-accent-foreground/75 hover:text-accent-foreground hover:bg-accent-foreground/10 transition-all duration-200"
               >
                 {menuOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
@@ -97,7 +97,7 @@ export default function Header() {
           >
             <nav
               aria-label="Navigation mobile"
-              className="bg-background/95 backdrop-blur-md border border-border/60 rounded-2xl shadow-sm px-3 py-3"
+              className="bg-accent text-accent-foreground rounded-lg px-3 py-3"
             >
               <ul className="flex flex-col gap-1 list-none">
                 {NAV_LINKS.map(({ to, label }) => {
@@ -108,10 +108,10 @@ export default function Header() {
                         href={to}
                         onClick={() => setMenuOpen(false)}
                         className={[
-                          "block px-4 py-2.5 text-[11px] uppercase tracking-[0.15em] font-medium rounded-full transition-all duration-200 no-underline",
+                          "block px-4 py-2.5 text-[11px] uppercase tracking-[0.15em] font-medium rounded-lg transition-all duration-200 underline-offset-4",
                           isActive
-                            ? "text-primary bg-primary/8"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted/60",
+                            ? "text-accent-foreground underline"
+                            : "text-accent-foreground/75 hover:text-accent-foreground no-underline hover:underline",
                         ].join(" ")}
                         style={{ fontFamily: "var(--font-body)" }}
                       >

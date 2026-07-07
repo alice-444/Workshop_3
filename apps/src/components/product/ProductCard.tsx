@@ -2,15 +2,8 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Route } from "next";
-import {
-  Card,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@e-commerce/ui/components/card";
-import AddToCartButton from "@/components/cart/AddToCartButton";
-import StarRating from "@/components/ui/StarRating";
+import { Image as ImageIcon } from "lucide-react";
+import { Card, CardHeader, CardTitle } from "@e-commerce/ui/components/card";
 import type { NormalizedProduct } from "@/lib/shopify";
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
@@ -29,7 +22,7 @@ export default function ProductCard({ product }: { product: NormalizedProduct })
     >
       <Link
         href={`/shop/${product.handle}` as Route}
-        className="block outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-t-[inherit]"
+        className="block outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-[inherit]"
         aria-label={`Voir ${product.name}`}
       >
         <div
@@ -50,12 +43,8 @@ export default function ProductCard({ product }: { product: NormalizedProduct })
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div
-              className={`absolute inset-0 flex items-center justify-center text-6xl transition-transform duration-500 ${outOfStock ? "grayscale opacity-40" : "group-hover:scale-110"}`}
-            >
-              <span role="img" aria-label={product.name}>
-                {product.emoji}
-              </span>
+            <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+              <ImageIcon size={20} aria-hidden="true" />
             </div>
           )}
           {outOfStock && (
@@ -67,47 +56,21 @@ export default function ProductCard({ product }: { product: NormalizedProduct })
             </span>
           )}
         </div>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <span
-              className="text-[9px] uppercase tracking-[0.2em] text-primary font-medium"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              {product.tag}
-            </span>
-            <span
-              className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              {product.wood}
-            </span>
-          </div>
+        <CardHeader className="py-4">
           <CardTitle
-            className="text-base font-medium mt-1 leading-snug"
-            style={{ fontFamily: "var(--font-heading)", fontSize: "1.05rem" }}
+            className="text-sm font-normal leading-snug"
+            style={{ fontFamily: "var(--font-body)" }}
           >
             {product.name}
           </CardTitle>
-          {product.rating !== undefined && (
-            <div className="mt-1.5">
-              <StarRating rating={product.rating} reviewCount={product.reviewCount} />
-            </div>
-          )}
-          <CardDescription className="text-xs leading-relaxed mt-1">
-            {product.description}
-          </CardDescription>
+          <p
+            className="text-sm text-muted-foreground mt-1"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            {priceFormatter.format(product.price)}
+          </p>
         </CardHeader>
       </Link>
-      <CardFooter className="flex items-center justify-between">
-        <span
-          className={`text-lg font-semibold ${outOfStock ? "text-muted-foreground" : "text-foreground"
-            }`}
-          style={{ fontFamily: "var(--font-heading)" }}
-        >
-          {priceFormatter.format(product.price)}
-        </span>
-        <AddToCartButton product={product} />
-      </CardFooter>
     </Card>
   );
 }

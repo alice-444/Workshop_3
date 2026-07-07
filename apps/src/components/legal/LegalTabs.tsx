@@ -10,7 +10,11 @@ type Props = {
 export default function LegalTabs({ active, onChange }: Props) {
     return (
         <div className="overflow-x-auto">
-            <nav className="flex flex-wrap gap-2" role="tablist">
+            <nav
+                className="flex flex-wrap gap-x-10 gap-y-2"
+                role="tablist"
+                aria-label="Informations légales"
+            >
                 {TABS.map((tab) => (
                     <button
                         key={tab.id}
@@ -18,11 +22,12 @@ export default function LegalTabs({ active, onChange }: Props) {
                         aria-selected={active === tab.id}
                         onClick={() => onChange(tab.id)}
                         className={[
-                            "px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                            "text-base md:text-lg whitespace-nowrap transition-colors",
                             active === tab.id
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground",
+                                ? "text-foreground font-semibold"
+                                : "text-muted-foreground hover:text-foreground",
                         ].join(" ")}
+                        style={{ fontFamily: "var(--font-heading)" }}
                     >
                         {tab.label}
                     </button>

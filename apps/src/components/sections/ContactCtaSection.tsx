@@ -33,15 +33,15 @@ export default function ContactCtaSection() {
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-12">
 
         {/* En-tête */}
-        <div className="flex flex-col items-center gap-3 text-center max-w-2xl">
+        <div className="flex flex-col items-center gap-3 text-center">
           <h2
-            className="text-5xl md:text-6xl font-light text-foreground leading-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground leading-tight md:whitespace-nowrap"
             style={{ fontFamily: "var(--font-heading)" }}
           >
             Tu souhaites en savoir plus ?
           </h2>
           <p
-            className="text-base text-muted-foreground leading-relaxed"
+            className="text-lg md:text-xl text-muted-foreground leading-relaxed"
             style={{ fontFamily: "var(--font-body)" }}
           >
             Une envie particulière ou une question sur mes ateliers ? Je suis à ton écoute.

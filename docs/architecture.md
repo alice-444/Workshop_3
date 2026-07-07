@@ -1,5 +1,63 @@
 # Architecture
 
+## Vue d'ensemble — architecture headless
+
+Le site est **headless** : le frontend (Next.js) est totalement découplé du back-office e-commerce. **Shopify** porte le catalogue, les stocks, le panier et le paiement via sa **Storefront API** (GraphQL) ; le front ne gère que l'UI et délègue le checkout à Shopify.
+
+### Vue macro
+
+```mermaid
+flowchart LR
+    subgraph Frontend["Frontend headless"]
+        next["Next.js 16\n(Vercel)"]
+    end
+    subgraph Backend["Back-office e-commerce"]
+        shopify["Shopify\nStorefront API (GraphQL)"]
+    end
+
+    client["🌐 Navigateur"] -->|"navigation"| next
+    next -->|"getProducts / cart mutations"| shopify
+    shopify -->|"catalogue, stocks, panier"| next
+    next -->|"HTML / RSC"| client
+    client -->|"checkout"| shopify
+    shopify -->|"paiement, confirmation"| client
+```
+
+### Vue micro
+
+Le découplage se traduit en deux chemins distincts côté Next.js, tous deux
+passant par `@/lib/shopify` :
+
+- **Server Components** (`page.tsx`) : fetch au rendu (SSR/RSC), pas d'appel
+  depuis le navigateur.
+- **Client Components** (`CartProvider`, `AddToCartButton`, …) : mutations
+  panier déclenchées depuis le navigateur.
+
+```mermaid
+flowchart TD
+    subgraph Next["Next.js"]
+        server["Server Component\n(page.tsx)"]
+        clientComp["Client Component\n(CartProvider, AddToCartButton)"]
+        lib["@/lib/shopify\n(products.ts, cart.ts, client.ts)"]
+    end
+
+    browser["🌐 Navigateur"]
+    api["Shopify\nStorefront API"]
+
+    server -->|"getProducts() au rendu"| lib
+    clientComp -->|"addItem / updateQuantity"| lib
+    lib -->|"GraphQL POST"| api
+    api -->|"produits / panier"| lib
+    lib --> server
+    lib --> clientComp
+    server -->|"HTML / RSC"| browser
+    clientComp -->|"état panier"| browser
+    browser -->|"redirect checkoutUrl"| api
+```
+
+Détail des flux (types, metafields, panier) : voir
+[shopify-integration.md](./shopify-integration.md).
+
 ## Monorepo
 
 Géré avec **Turborepo** + **pnpm workspaces**. Le catalogue de versions
@@ -177,12 +235,14 @@ flowchart LR
 
 ## Données (`apps/src/data/`)
 
-Données statiques typées, sans backend. Chaque fichier exporte ses constantes
-et ses types.
+Le catalogue produit vient désormais de **Shopify** (voir
+[shopify-integration.md](./shopify-integration.md)). `apps/src/data/` ne
+contient plus que du contenu éditorial statique et typé (FAQ, mentions
+légales) ainsi que les métadonnées de filtrage boutique (catégories, tris).
 
 | Fichier         | Exports principaux                                                                           |
 | --------------- | -------------------------------------------------------------------------------------------- |
-| `shop.data.ts`  | `PRODUCTS`, `SHOP_CATEGORIES`, `SHOP_SORTS`, types `Product`, `ShopCategoryId`, `ShopSortId`. `Product` inclut `inStock`, `rating`, `reviewCount` |
+| `shop.data.ts`  | `SHOP_CATEGORIES`, `SHOP_SORTS` — options de filtrage/tri (les produits viennent de Shopify) |
 | `faq.data.ts`   | `FAQ_TABS`, `FAQ_CONTENT`, types `FaqItem`, `FaqTabId`                                       |
 | `legal.data.ts` | `TABS`, `CONTENT`, type `TabId`                                                              |
 

@@ -1,81 +1,35 @@
-export const FAQ_TABS = [
-  { id: "commandes", label: "Commandes" },
-  { id: "livraison", label: "Livraison" },
-  { id: "retours", label: "Retours" },
-  { id: "paiement", label: "Paiement" },
-] as const;
-
-export type FaqTabId = (typeof FAQ_TABS)[number]["id"];
-
-export type FaqItem = { question: string; answer: string };
-
-export const FAQ_CONTENT: Record<FaqTabId, FaqItem[]> = {
-  commandes: [
-    {
-      question: "Comment passer une commande ?",
-      answer:
-        "Ajoutez les articles souhaités à votre panier, puis cliquez sur « Commander ». Suivez les étapes de validation : adresse, livraison, paiement.",
-    },
-    {
-      question: "Puis-je modifier ma commande après validation ?",
-      answer:
-        "Les modifications sont possibles dans l'heure suivant la validation. Passé ce délai, contactez notre service client.",
-    },
-    {
-      question: "Comment suivre ma commande ?",
-      answer:
-        "Un e-mail de confirmation avec un lien de suivi vous est envoyé dès l'expédition. Vous pouvez aussi consulter l'historique dans votre compte.",
-    },
-  ],
-  livraison: [
-    {
-      question: "Quels sont les délais de livraison ?",
-      answer:
-        "La livraison standard prend 3 à 5 jours ouvrés. La livraison express est disponible en 24 h pour les commandes passées avant 12 h.",
-    },
-    {
-      question: "Livrez-vous à l'international ?",
-      answer:
-        "Oui, nous livrons dans plus de 30 pays. Les frais et délais varient selon la destination, consultez notre page livraison pour les détails.",
-    },
-    {
-      question: "La livraison est-elle gratuite ?",
-      answer:
-        "La livraison est offerte pour toute commande supérieure à 50 €. En dessous, des frais forfaitaires de 4,90 € s'appliquent.",
-    },
-  ],
-  retours: [
-    {
-      question: "Comment retourner un article ?",
-      answer:
-        "Rendez-vous dans « Mes commandes », sélectionnez l'article et cliquez sur « Retourner ». Imprimez l'étiquette prépayée et déposez le colis en point relais.",
-    },
-    {
-      question: "Quel est le délai pour effectuer un retour ?",
-      answer:
-        "Vous disposez de 30 jours à compter de la réception pour retourner un article dans son état d'origine avec les étiquettes.",
-    },
-    {
-      question: "Quand serai-je remboursé ?",
-      answer:
-        "Le remboursement est effectué sous 5 à 7 jours ouvrés après réception et contrôle du colis retourné.",
-    },
-  ],
-  paiement: [
-    {
-      question: "Quels moyens de paiement acceptez-vous ?",
-      answer:
-        "Nous acceptons les cartes bancaires (Visa, Mastercard, Amex), PayPal, Apple Pay et le virement bancaire.",
-    },
-    {
-      question: "Mes données bancaires sont-elles sécurisées ?",
-      answer:
-        "Oui, toutes les transactions sont chiffrées via SSL et nous ne stockons aucune donnée de carte bancaire sur nos serveurs.",
-    },
-    {
-      question: "Puis-je payer en plusieurs fois ?",
-      answer:
-        "Le paiement en 3 ou 4 fois sans frais est disponible via Alma pour les commandes supérieures à 100 €.",
-    },
-  ],
+export type FaqItem = {
+  question: string;
+  answer: string;
+  image: string;
+  imageAlt: string;
+  /** Classes Tailwind du cadre coloré autour de l'image. */
+  frameClass: string;
 };
+
+export const FAQ_ITEMS: FaqItem[] = [
+  {
+    question: "Réalisez-vous les découpes de bois vous-même ?",
+    answer:
+      "Oui, chaque découpe est réalisée à la main dans mon atelier. Je dessine d'abord chaque motif, puis je découpe les différentes couches de bois à la scie à chantourner avant de les poncer et de les assembler avec soin.",
+    image: "/Giraffe.png",
+    imageAlt: "Découpe de girafe en bois en cours de peinture dans l'atelier",
+    frameClass: "bg-[oklch(0.78_0.02_250)] dark:bg-[oklch(0.35_0.03_250)]",
+  },
+  {
+    question: "Quel type de peinture utilisez-vous pour vos créations ?",
+    answer:
+      "J'utilise de la peinture spécialement conçue pour le bois extérieur. Ce choix technique permet d'assurer une plus longue tenue dans le temps. Les couleurs offrent un pouvoir couvrant élevé, une finition soignée et sont parfaitement résistantes à l'eau, protégeant ainsi l'œuvre durablement.",
+    image: "/Koala.png",
+    imageAlt: "Dessin d'un loup en cours de mise en couleur",
+    frameClass: "bg-[oklch(0.91_0.02_340)] dark:bg-[oklch(0.35_0.03_340)]",
+  },
+  {
+    question: "D'où provient le bois que vous utilisez ?",
+    answer:
+      "Chaque création est réalisée en bois de Méranti, soigneusement sélectionné auprès de fournisseurs locaux. Je privilégie systématiquement les matériaux issus de circuits courts et je me déplace moi-même pour choisir chaque pièce de bois afin d'en garantir la qualité. Cette démarche me permet de soutenir les acteurs de mon territoire, tout en donnant vie à des décorations authentiques, durables et fabriquées avec le plus grand soin.",
+    image: "/image3.png",
+    imageAlt: "Croquis de héron et de lièvre sur la table de l'atelier",
+    frameClass: "bg-[oklch(0.75_0.1_60)] dark:bg-[oklch(0.4_0.07_60)]",
+  },
+];

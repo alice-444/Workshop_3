@@ -4,22 +4,13 @@ import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@e-commerce/ui/components/button";
-import { Input } from "@e-commerce/ui/components/input";
 import { Label } from "@e-commerce/ui/components/label";
 import { Checkbox } from "@e-commerce/ui/components/checkbox";
-
-const SUBJECTS = [
-  "Création sur-mesure",
-  "Réserver un atelier",
-  "Devis professionnel",
-  "Suivi de commande",
-  "Autre",
-] as const;
 
 const schema = z.object({
   name: z.string().trim().min(2, "Indiquez votre nom."),
   email: z.string().trim().email("Adresse e-mail invalide."),
-  subject: z.string().min(1, "Choisissez un sujet."),
+  subject: z.string().trim().min(2, "Indiquez un sujet."),
   message: z.string().trim().min(10, "Votre message doit faire au moins 10 caractères."),
   consent: z.boolean().refine((v) => v, "Veuillez accepter pour continuer."),
 });
@@ -29,12 +20,35 @@ type FieldErrors = Partial<Record<keyof z.infer<typeof schema>, string>>;
 const EMPTY = { name: "", email: "", subject: "", message: "", consent: false };
 
 const fieldClass =
-  "h-9 w-full rounded-none border border-input bg-transparent px-3 py-1 text-sm transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 dark:bg-input/30";
+  "w-full rounded-lg border border-foreground/30 bg-muted/60 px-3 py-2 text-sm text-foreground transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 dark:bg-input/30";
+
+const labelClass = "text-sm text-foreground";
+
+type TextField = {
+  key: "name" | "email" | "subject";
+  label: string;
+  type: string;
+};
+
+const TEXT_FIELDS: TextField[] = [
+  { key: "name", label: "Votre nom :", type: "text" },
+  { key: "email", label: "Votre mail :", type: "email" },
+  { key: "subject", label: "Sujet :", type: "text" },
+];
+
+const SUBJECT_SUGGESTIONS = [
+  "Création sur-mesure",
+  "Réserver un atelier",
+  "Question sur une commande",
+  "Demande de devis",
+  "Autre",
+];
 
 export default function ContactForm() {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [subjectFocused, setSubjectFocused] = useState(false);
 
   function setField<K extends keyof typeof EMPTY>(key: K, value: (typeof EMPTY)[K]) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -64,84 +78,80 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
-      {/* Nom */}
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="contact-name" className="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
-          Nom
-        </Label>
-        <Input
-          id="contact-name"
-          value={values.name}
-          onChange={(e) => setField("name", e.target.value)}
-          aria-invalid={!!errors.name}
-          aria-describedby={errors.name ? "contact-name-error" : undefined}
-          placeholder="Votre nom"
-          className="h-9 text-sm px-3"
-        />
-        {errors.name && (
-          <p id="contact-name-error" className="text-[11px] text-destructive" role="alert">
-            {errors.name}
-          </p>
-        )}
-      </div>
-
-      {/* E-mail */}
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="contact-email" className="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
-          E-mail
-        </Label>
-        <Input
-          id="contact-email"
-          type="email"
-          value={values.email}
-          onChange={(e) => setField("email", e.target.value)}
-          aria-invalid={!!errors.email}
-          aria-describedby={errors.email ? "contact-email-error" : undefined}
-          placeholder="vous@exemple.fr"
-          className="h-9 text-sm px-3"
-        />
-        {errors.email && (
-          <p id="contact-email-error" className="text-[11px] text-destructive" role="alert">
-            {errors.email}
-          </p>
-        )}
-      </div>
-
-      {/* Sujet */}
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="contact-subject" className="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
-          Sujet
-        </Label>
-        <select
-          id="contact-subject"
-          value={values.subject}
-          onChange={(e) => setField("subject", e.target.value)}
-          aria-invalid={!!errors.subject}
-          aria-describedby={errors.subject ? "contact-subject-error" : undefined}
-          className={`${fieldClass} cursor-pointer`}
-          style={{ fontFamily: "var(--font-body)" }}
-        >
-          <option value="" disabled>
-            Choisissez un sujet…
-          </option>
-          {SUBJECTS.map((s) => (
-            <option key={s} value={s} className="bg-background text-foreground">
-              {s}
-            </option>
-          ))}
-        </select>
-        {errors.subject && (
-          <p id="contact-subject-error" className="text-[11px] text-destructive" role="alert">
-            {errors.subject}
-          </p>
-        )}
-      </div>
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="flex flex-col gap-6"
+      style={{ fontFamily: "var(--font-body)" }}
+    >
+      {TEXT_FIELDS.map(({ key, label, type }) => {
+        const isSubject = key === "subject";
+        const suggestions = isSubject
+          ? SUBJECT_SUGGESTIONS.filter((s) =>
+            s.toLowerCase().includes(values.subject.trim().toLowerCase()),
+          )
+          : [];
+        const showSuggestions =
+          isSubject && subjectFocused && suggestions.length > 0;
+        return (
+          <div key={key} className="flex flex-col gap-2">
+            <Label htmlFor={`contact-${key}`} className={labelClass}>
+              {label}
+            </Label>
+            <div className="relative">
+              <input
+                id={`contact-${key}`}
+                type={type}
+                value={values[key]}
+                onChange={(e) => setField(key, e.target.value)}
+                onFocus={isSubject ? () => setSubjectFocused(true) : undefined}
+                onBlur={isSubject ? () => setSubjectFocused(false) : undefined}
+                autoComplete={isSubject ? "off" : undefined}
+                role={isSubject ? "combobox" : undefined}
+                aria-expanded={isSubject ? showSuggestions : undefined}
+                aria-invalid={!!errors[key]}
+                aria-describedby={errors[key] ? `contact-${key}-error` : undefined}
+                className={fieldClass}
+              />
+              {showSuggestions && (
+                <ul
+                  className="absolute left-0 right-0 top-full mt-1 z-20 list-none overflow-hidden rounded-lg border border-border bg-card shadow-md"
+                  role="listbox"
+                >
+                  {suggestions.map((s) => (
+                    <li key={s}>
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={values.subject === s}
+                        // onMouseDown pour devancer le blur du champ.
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setField("subject", s);
+                          setSubjectFocused(false);
+                        }}
+                        className="w-full px-3 py-2 text-left text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                      >
+                        {s}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {errors[key] && (
+              <p id={`contact-${key}-error`} className="text-[11px] text-destructive" role="alert">
+                {errors[key]}
+              </p>
+            )}
+          </div>
+        );
+      })}
 
       {/* Message */}
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="contact-message" className="text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
-          Message
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="contact-message" className={labelClass}>
+          Votre message :
         </Label>
         <textarea
           id="contact-message"
@@ -149,10 +159,8 @@ export default function ContactForm() {
           onChange={(e) => setField("message", e.target.value)}
           aria-invalid={!!errors.message}
           aria-describedby={errors.message ? "contact-message-error" : undefined}
-          rows={5}
-          placeholder="Décrivez votre projet ou votre question…"
-          className={`${fieldClass} h-auto py-2.5 resize-y leading-relaxed`}
-          style={{ fontFamily: "var(--font-body)" }}
+          rows={9}
+          className={`${fieldClass} resize-y leading-relaxed`}
         />
         {errors.message && (
           <p id="contact-message-error" className="text-[11px] text-destructive" role="alert">
@@ -174,9 +182,8 @@ export default function ContactForm() {
           <Label
             htmlFor="contact-consent"
             className="text-[11px] leading-relaxed text-muted-foreground"
-            style={{ fontFamily: "var(--font-body)" }}
           >
-            J'accepte que mes informations soient utilisées pour répondre à ma demande.
+            J&apos;accepte que mes informations soient utilisées pour répondre à ma demande.
           </Label>
         </div>
         {errors.consent && (
@@ -186,14 +193,16 @@ export default function ContactForm() {
         )}
       </div>
 
-      <Button
-        type="submit"
-        size="lg"
-        disabled={submitting}
-        className="px-8 h-11 text-xs tracking-[0.15em] uppercase self-start"
-      >
-        {submitting ? "Envoi…" : "Envoyer le message"}
-      </Button>
+      <div className="flex justify-center pt-2">
+        <Button
+          type="submit"
+          size="lg"
+          disabled={submitting}
+          className="px-8 h-13 text-lg font-medium"
+        >
+          {submitting ? "Envoi…" : "Envoyer le message"}
+        </Button>
+      </div>
     </form>
   );
 }

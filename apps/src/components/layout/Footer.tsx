@@ -13,8 +13,8 @@ const NAV_LINKS: FooterLink[] = [
 ];
 
 const INFO_LINKS: FooterLink[] = [
-  { href: "/faq", label: "FAQ" },
-  { href: "/faq", label: "Livraison & Retours" },
+  { href: { pathname: "/contact", hash: "faq" }, label: "FAQ" },
+  { href: { pathname: "/legal", query: { tab: "cgv" } }, label: "Livraison & Retours" },
   { href: { pathname: "/legal", query: { tab: "mentions" } }, label: "Mentions légales" },
   { href: { pathname: "/legal", query: { tab: "cgv" } }, label: "CGV" },
   {

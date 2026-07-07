@@ -24,7 +24,7 @@ export default function ContactPage() {
           {/* Visuel */}
           <div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted">
             <Image
-              src="/Lapin.png"
+              src="/contact/books.png"
               alt="Livres jeunesse et lièvre en bois peint dans l'atelier"
               fill
               className="object-cover"

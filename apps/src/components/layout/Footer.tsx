@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { ComponentProps } from "react";
-import { FaInstagram, FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaSquareFacebook } from "react-icons/fa6";
 
 type FooterLink = { href: ComponentProps<typeof Link>["href"]; label: string };
 
@@ -26,21 +26,27 @@ const INFO_LINKS: FooterLink[] = [
 const INSTAGRAM_URL = "#";
 const FACEBOOK_URL = "#";
 
+function ColumnTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h2
+      className="text-xs uppercase tracking-[0.15em] text-accent-foreground/70 font-medium mb-4"
+      style={{ fontFamily: "var(--font-body)" }}
+    >
+      {children}
+    </h2>
+  );
+}
+
 function LinkColumn({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <nav aria-label={title}>
-      <h2
-        className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 font-medium mb-4"
-        style={{ fontFamily: "var(--font-body)" }}
-      >
-        {title}
-      </h2>
-      <ul className="flex flex-col gap-2.5 list-none">
+      <ColumnTitle>{title}</ColumnTitle>
+      <ul className="flex flex-col gap-2 list-none">
         {links.map(({ href, label }) => (
           <li key={label}>
             <Link
               href={href}
-              className="text-sm text-foreground/80 hover:text-primary transition-colors no-underline"
+              className="text-sm text-accent-foreground/85 hover:text-accent-foreground transition-colors no-underline"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {label}
@@ -54,64 +60,71 @@ function LinkColumn({ title, links }: { title: string; links: FooterLink[] }) {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border/50 bg-muted/20">
-      <div className="max-w-5xl mx-auto px-6 py-10">
-        <div className="flex flex-col gap-10 md:flex-row md:justify-between md:gap-16">
+    <footer className="pt-4">
+      <div className="bg-accent text-accent-foreground rounded-t-3xl">
+        <div className="max-w-5xl mx-auto px-6 py-8">
+          <div className="flex flex-col gap-10 lg:flex-row lg:justify-between lg:gap-16">
 
-          {/* Marque */}
-          <div className="flex max-w-sm flex-col items-start gap-4">
-            <Link href="/" aria-label="Animal-Totem — Retour à l'accueil" className="no-underline">
-              <Image
-                src="/logo/logo_footer.png"
-                alt="Animal-Totem"
-                width={84}
-                height={60}
-                className="h-16 w-auto select-none"
-              />
-            </Link>
-            <p
-              className="max-w-xs text-sm text-muted-foreground/80 font-light leading-relaxed"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              L&apos;authenticité du bois, des créations pensées pour durer.
-            </p>
-            <div className="flex items-center gap-1">
-              <Link
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="p-2 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/60 transition-all duration-200"
-              >
-                <FaInstagram size={22} />
+            {/* Marque */}
+            <div className="flex max-w-md flex-col items-start gap-5">
+              <Link href="/" aria-label="Animal-Totem — Retour à l'accueil" className="no-underline">
+                <Image
+                  src="/logo/logo_navbar.png"
+                  alt="Animal-Totem"
+                  width={230}
+                  height={54}
+                  className="h-14 w-auto rounded-lg select-none shadow-sm"
+                />
               </Link>
-              <Link
-                href={FACEBOOK_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="p-2 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/60 transition-all duration-200"
+              <p
+                className="text-sm text-accent-foreground/90 leading-relaxed"
+                style={{ fontFamily: "var(--font-body)" }}
               >
-                <FaFacebook size={22} />
-              </Link>
+                L&apos;authenticité du bois, des créations pensées pour durer.
+              </p>
+            </div>
+
+            {/* Colonnes de liens */}
+            <div className="flex flex-wrap gap-12 sm:gap-20">
+              <LinkColumn title="Navigation" links={NAV_LINKS} />
+              <LinkColumn title="Information" links={INFO_LINKS} />
+
+              {/* Réseaux sociaux */}
+              <div>
+                <ColumnTitle>Suivez-nous</ColumnTitle>
+                <div className="flex items-center gap-3">
+                  <Link
+                    href={INSTAGRAM_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="text-accent-foreground/85 hover:text-accent-foreground transition-colors"
+                  >
+                    <FaInstagram size={22} />
+                  </Link>
+                  <Link
+                    href={FACEBOOK_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="text-accent-foreground/85 hover:text-accent-foreground transition-colors"
+                  >
+                    <FaSquareFacebook size={22} />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Colonnes de liens */}
-          <div className="flex gap-12 sm:gap-20">
-            <LinkColumn title="Navigation" links={NAV_LINKS} />
-            <LinkColumn title="Information" links={INFO_LINKS} />
+          {/* Bas de page */}
+          <div className="mt-8 border-t border-accent-foreground/20 pt-4">
+            <p
+              className="text-center text-xs text-accent-foreground/70"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              © {new Date().getFullYear()} Animal-Totem
+            </p>
           </div>
-        </div>
-
-        {/* Bas de page */}
-        <div className="mt-10 border-t border-border/50 pt-6">
-          <p
-            className="text-center text-xs text-muted-foreground/70 font-light"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            © {new Date().getFullYear()} Animal-Totem — Tous droits réservés.
-          </p>
         </div>
       </div>
     </footer>

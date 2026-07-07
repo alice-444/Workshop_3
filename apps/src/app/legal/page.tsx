@@ -3,8 +3,8 @@ import LegalClient from "./LegalClient";
 import { TABS, type TabId } from "@/data/legal.data";
 
 export const metadata: Metadata = {
-    title: "Legal Information",
-    description: "Retrouvez les informations légales de notre boutique en ligne : CGV, mentions légales, politique de retour, CGU, confidentialité et paiement.",
+    title: "Informations légales",
+    description: "Retrouvez les informations légales d'Animal-Totem : mentions légales, conditions générales de vente (CGV) et politique de confidentialité.",
 };
 
 export default async function LegalPage({
@@ -15,6 +15,6 @@ export default async function LegalPage({
     const { tab } = await searchParams;
     const initialTab: TabId = TABS.some((t) => t.id === tab)
         ? (tab as TabId)
-        : "cgv";
+        : "mentions";
     return <LegalClient initialTab={initialTab} />;
 }

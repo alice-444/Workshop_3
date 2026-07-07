@@ -17,7 +17,7 @@ export default function ProductCard({ product }: { product: NormalizedProduct })
 
   return (
     <Card
-      className={`group transition-all duration-300 ${outOfStock ? "opacity-90" : "cursor-pointer hover:ring-primary/30"
+      className={`group shadow-md transition-all duration-300 ${outOfStock ? "opacity-90" : "cursor-pointer hover:shadow-lg hover:ring-primary/30"
         }`}
     >
       <Link

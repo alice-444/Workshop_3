@@ -29,10 +29,7 @@ export function normalizeProduct(p: ShopifyProduct): NormalizedProduct {
     tag,
     wood: metafield("wood"),
     emoji: metafield("emoji"),
-    bg: {
-      light: metafield("bg_light") || "oklch(0.93 0.02 72)",
-      dark: metafield("bg_dark") || "oklch(0.26 0.025 58)",
-    },
+    bg: metafield("bg_light") || "oklch(0.93 0.02 72)",
     image: p.featuredImage?.url ?? null,
     variantId: p.variants.nodes[0]?.id ?? "",
   };

@@ -85,7 +85,7 @@ export type NormalizedProduct = {
   tag: string;
   wood: string;
   emoji: string;
-  bg: { light: string; dark: string };
+  bg: string;
   image: string | null;
   variantId: string;
   rating?: number;

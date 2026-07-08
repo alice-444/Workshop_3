@@ -7,7 +7,6 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 import CartPopover from "@/components/cart/CartPopover";
-import { ModeToggle } from "@/components/ui/ModeToggle";
 
 const NAV_LINKS: { to: Route; label: string }[] = [
   { to: "/" as Route, label: "Accueil" },
@@ -77,7 +76,6 @@ export default function Header() {
             {/* Actions droite */}
             <div className="flex items-center gap-2 shrink-0">
               <CartPopover />
-              <ModeToggle />
               {/* Burger — mobile uniquement */}
               <button
                 onClick={() => setMenuOpen((v) => !v)}

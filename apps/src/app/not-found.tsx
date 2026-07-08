@@ -9,11 +9,10 @@ export default function NotFound() {
       <div className="max-w-md text-center flex flex-col items-center">
         {/* Pictogramme */}
         <div
-          className="w-24 h-24 rounded-2xl flex items-center justify-center mb-8 bg-[var(--p-bg)] dark:bg-[var(--p-bg-dark)]"
+          className="w-24 h-24 rounded-2xl flex items-center justify-center mb-8 bg-[var(--p-bg)]"
           style={
             {
               "--p-bg": "oklch(0.9 0.03 70)",
-              "--p-bg-dark": "oklch(0.27 0.03 60)",
             } as React.CSSProperties
           }
         >

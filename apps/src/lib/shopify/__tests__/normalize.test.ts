@@ -34,7 +34,6 @@ function makeProduct(overrides: Partial<ShopifyProduct> = {}): ShopifyProduct {
       { key: "wood", value: "Chêne" },
       { key: "emoji", value: "🖼️" },
       { key: "bg_light", value: "oklch(0.93 0.02 72)" },
-      { key: "bg_dark", value: "oklch(0.26 0.025 58)" },
     ],
     ...overrides,
   };
@@ -89,14 +88,12 @@ describe("normalizeProduct", () => {
     const result = normalizeProduct(makeProduct());
     expect(result.wood).toBe("Chêne");
     expect(result.emoji).toBe("🖼️");
-    expect(result.bg.light).toBe("oklch(0.93 0.02 72)");
-    expect(result.bg.dark).toBe("oklch(0.26 0.025 58)");
+    expect(result.bg).toBe("oklch(0.93 0.02 72)");
   });
 
-  it("utilise les couleurs de fallback si metafields bg absents", () => {
+  it("utilise la couleur de fallback si le metafield bg est absent", () => {
     const result = normalizeProduct(makeProduct({ metafields: [] }));
-    expect(result.bg.light).toBe("oklch(0.93 0.02 72)");
-    expect(result.bg.dark).toBe("oklch(0.26 0.025 58)");
+    expect(result.bg).toBe("oklch(0.93 0.02 72)");
   });
 
   it("retourne une chaîne vide si metafield absent", () => {

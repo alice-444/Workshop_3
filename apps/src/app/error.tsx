@@ -20,11 +20,10 @@ export default function Error({
     <main className="min-h-[70vh] flex items-center justify-center px-6 py-24">
       <div className="max-w-md text-center flex flex-col items-center">
         <div
-          className="w-24 h-24 rounded-2xl flex items-center justify-center mb-8 bg-[var(--p-bg)] dark:bg-[var(--p-bg-dark)]"
+          className="w-24 h-24 rounded-2xl flex items-center justify-center mb-8 bg-[var(--p-bg)]"
           style={
             {
               "--p-bg": "oklch(0.83 0.05 60)",
-              "--p-bg-dark": "oklch(0.3 0.04 56)",
             } as React.CSSProperties
           }
         >

@@ -1,14 +1,32 @@
 import type { Metadata } from "next";
 import ShopClient from "./ShopClient";
 import { getProducts, normalizeProduct } from "@/lib/shopify";
+import { SITE_URL, SITE_OG_IMAGE } from "@/lib/site";
 
 // ISR : régénère la page au plus toutes les 60 s pour refléter le catalogue Shopify.
 export const revalidate = 60;
 
+const TITLE = "Collection";
+const DESCRIPTION =
+    "Découvrez notre ménagerie de bois. Chaque animal totem est une pièce unique, sculptée et peinte à la main avec passion dans notre atelier.";
+
 export const metadata: Metadata = {
-    title: "Collection",
-    description:
-        "Découvrez notre ménagerie de bois. Chaque animal totem est une pièce unique, sculptée et peinte à la main avec passion dans notre atelier.",
+    title: TITLE,
+    description: DESCRIPTION,
+    alternates: { canonical: "/shop" },
+    openGraph: {
+        type: "website",
+        url: `${SITE_URL}/shop`,
+        title: TITLE,
+        description: DESCRIPTION,
+        images: [SITE_OG_IMAGE],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: TITLE,
+        description: DESCRIPTION,
+        images: [SITE_OG_IMAGE.url],
+    },
 };
 
 export default async function ShopPage() {

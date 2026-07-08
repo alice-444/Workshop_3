@@ -9,27 +9,27 @@ const CARDS = [
     src: "/image1.png",
     alt: "Pots de peinture dans l'atelier",
     title: "Une création sur-mesure",
-    bgClass: "bg-[oklch(0.91_0.025_72)] dark:bg-[oklch(0.26_0.025_62)]",
+    bgClass: "bg-[oklch(0.91_0.025_72)]",
   },
   {
     id: "image2",
     src: "/image2.png",
     alt: "Choix des couleurs dans la boîte de pastels",
     title: "Réserver un atelier",
-    bgClass: "bg-[oklch(0.91_0.03_290)] dark:bg-[oklch(0.26_0.04_285)]",
+    bgClass: "bg-[oklch(0.91_0.03_290)]",
   },
   {
     id: "image3",
     src: "/image3.png",
     alt: "Dessin à la main en cours de création",
     title: "Obtenir un devis",
-    bgClass: "bg-[oklch(0.91_0.018_235)] dark:bg-[oklch(0.24_0.02_240)]",
+    bgClass: "bg-[oklch(0.91_0.018_235)]",
   },
 ];
 
 export default function ContactCtaSection() {
   return (
-    <section className="py-16 overflow-hidden bg-[oklch(0.975_0.01_72)] dark:bg-[oklch(0.185_0.02_52)]">
+    <section className="py-16 overflow-hidden bg-[oklch(0.975_0.01_72)]">
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-12">
 
         {/* En-tête */}

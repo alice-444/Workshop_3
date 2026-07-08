@@ -29,7 +29,6 @@ export const PRODUCT_FRAGMENT = `
       { namespace: "custom", key: "wood" }
       { namespace: "custom", key: "emoji" }
       { namespace: "custom", key: "bg_light" }
-      { namespace: "custom", key: "bg_dark" }
     ]) { key value }
   }
 `;

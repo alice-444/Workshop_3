@@ -29,9 +29,9 @@ const ATELIERS_TEXTE = [
 ];
 
 const ATELIERS_IMAGES = [
-  { src: "/ateliers.png", alt: "Spectacle de conte avec théâtre d'ombres devant des enfants" },
-  { src: "/image2.png", alt: "Décor en bas-relief éclairé : renard dans la forêt" },
-  { src: "/image3.png", alt: "Décor de baleine en bois peint" },
+  { src: "/about/jellyfish.jpg", alt: "Spectacle devant des enfants" },
+  { src: "/about/wolf.jpg", alt: "Décor en bas-relief éclairé" },
+  { src: "/about/whale.jpg", alt: "Décor de baleine en bois peint" },
 ];
 
 function Framed({
@@ -39,14 +39,16 @@ function Framed({
   alt,
   aspect = "aspect-4/3",
   sizes,
+  frameClass = "bg-[oklch(0.93_0.035_90)] dark:bg-[oklch(0.3_0.03_80)] ring-1 ring-border/60",
 }: {
   src: string;
   alt: string;
   aspect?: string;
   sizes: string;
+  frameClass?: string;
 }) {
   return (
-    <div className="bg-[oklch(0.93_0.035_90)] dark:bg-[oklch(0.3_0.03_80)] p-2 rounded-2xl ring-1 ring-border/60">
+    <div className={`${frameClass} p-2 rounded-2xl`}>
       <div className={`relative ${aspect} w-full overflow-hidden rounded-xl bg-muted`}>
         <Image src={src} alt={alt} fill className="object-cover" sizes={sizes} />
       </div>
@@ -69,7 +71,7 @@ export default function AboutPage() {
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Portrait */}
           <Framed
-            src="/sur-mesure.png"
+            src="/about/claire.png"
             alt="Claire dans son atelier"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
@@ -122,18 +124,20 @@ export default function AboutPage() {
               ))}
             </div>
             <Framed
-              src="/Hero.png"
+              src="/about/creation1.png"
               alt="Claire derrière une tête de héron en bois peint"
               sizes="(max-width: 768px) 100vw, 50vw"
+              frameClass="bg-[oklch(0.72_0.045_40)] dark:bg-[oklch(0.38_0.04_40)]"
             />
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="order-2 md:order-1">
               <Framed
-                src="/image1.png"
+                src="/about/creation2.png"
                 alt="Application de peinture au pinceau sur une pièce en bois"
                 sizes="(max-width: 768px) 100vw, 50vw"
+                frameClass="bg-[oklch(0.72_0.025_250)] dark:bg-[oklch(0.38_0.03_250)]"
               />
             </div>
             <div

@@ -8,6 +8,9 @@ import StarRating from "@/components/ui/StarRating";
 import { getProducts, getProduct, normalizeProduct } from "@/lib/shopify";
 import ProductBuyBox from "@/components/product/ProductBuyBox";
 
+// ISR : régénère la fiche au plus toutes les 60 s pour refléter le catalogue Shopify.
+export const revalidate = 60;
+
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",
   currency: "EUR",

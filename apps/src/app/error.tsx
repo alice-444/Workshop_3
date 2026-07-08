@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@e-commerce/ui/components/button";
 
 export default function Error({
@@ -19,7 +20,7 @@ export default function Error({
     <main className="min-h-[70vh] flex items-center justify-center px-6 py-24">
       <div className="max-w-md text-center flex flex-col items-center">
         <div
-          className="w-24 h-24 rounded-2xl flex items-center justify-center text-5xl mb-8 bg-[var(--p-bg)] dark:bg-[var(--p-bg-dark)]"
+          className="w-24 h-24 rounded-2xl flex items-center justify-center mb-8 bg-[var(--p-bg)] dark:bg-[var(--p-bg-dark)]"
           style={
             {
               "--p-bg": "oklch(0.83 0.05 60)",
@@ -27,9 +28,13 @@ export default function Error({
             } as React.CSSProperties
           }
         >
-          <span role="img" aria-label="Outil cassé">
-            🪚
-          </span>
+          <Image
+            src="/logo/logo_icon.png"
+            alt="Animal-Totem"
+            width={72}
+            height={72}
+            className="h-16 w-auto select-none"
+          />
         </div>
 
         <p

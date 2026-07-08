@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Route } from "next";
 import { Button } from "@e-commerce/ui/components/button";
 
@@ -8,7 +9,7 @@ export default function NotFound() {
       <div className="max-w-md text-center flex flex-col items-center">
         {/* Pictogramme */}
         <div
-          className="w-24 h-24 rounded-2xl flex items-center justify-center text-5xl mb-8 bg-[var(--p-bg)] dark:bg-[var(--p-bg-dark)]"
+          className="w-24 h-24 rounded-2xl flex items-center justify-center mb-8 bg-[var(--p-bg)] dark:bg-[var(--p-bg-dark)]"
           style={
             {
               "--p-bg": "oklch(0.9 0.03 70)",
@@ -16,9 +17,13 @@ export default function NotFound() {
             } as React.CSSProperties
           }
         >
-          <span role="img" aria-label="Copeaux de bois">
-            🪵
-          </span>
+          <Image
+            src="/logo/logo_icon.png"
+            alt="Animal-Totem"
+            width={72}
+            height={72}
+            className="h-16 w-auto select-none"
+          />
         </div>
 
         <p

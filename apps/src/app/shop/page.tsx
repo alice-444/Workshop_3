@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import ShopClient from "./ShopClient";
 import { getProducts, normalizeProduct } from "@/lib/shopify";
 
+// ISR : régénère la page au plus toutes les 60 s pour refléter le catalogue Shopify.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
     title: "Collection",
     description:

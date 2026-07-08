@@ -3,11 +3,29 @@ import type { Route } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@e-commerce/ui/components/button";
+import { SITE_URL } from "@/lib/site";
+
+const TITLE = "À propos";
+const DESCRIPTION =
+  "Rencontrez Claire, artiste plasticienne et conteuse, créatrice d'Animal-Totem : créations en bois sur-mesure et ateliers créatifs pour les jeunes publics.";
 
 export const metadata: Metadata = {
-  title: "À propos",
-  description:
-    "Rencontrez Claire, artiste plasticienne et conteuse, créatrice d'Animal-Totem : créations en bois sur-mesure et ateliers créatifs pour les jeunes publics.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/about" },
+  openGraph: {
+    type: "website",
+    url: `${SITE_URL}/about`,
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [{ url: `${SITE_URL}/about/claire.png`, alt: "Claire dans son atelier" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [`${SITE_URL}/about/claire.png`],
+  },
 };
 
 const SUR_MESURE_INTRO = [
@@ -39,7 +57,7 @@ function Framed({
   alt,
   aspect = "aspect-4/3",
   sizes,
-  frameClass = "bg-[oklch(0.93_0.035_90)] dark:bg-[oklch(0.3_0.03_80)] ring-1 ring-border/60",
+  frameClass = "bg-[oklch(0.93_0.035_90)] ring-1 ring-border/60",
 }: {
   src: string;
   alt: string;
@@ -105,7 +123,7 @@ export default function AboutPage() {
       </section>
 
       {/* Créations sur-mesure */}
-      <section className="bg-[oklch(0.96_0.018_70)] dark:bg-[oklch(0.185_0.025_52)] py-16">
+      <section className="bg-[oklch(0.96_0.018_70)] py-16">
         <div className="max-w-6xl mx-auto px-6 flex flex-col gap-16">
           <h2
             className="text-4xl md:text-5xl font-normal text-foreground"
@@ -127,7 +145,7 @@ export default function AboutPage() {
               src="/about/creation1.png"
               alt="Claire derrière une tête de héron en bois peint"
               sizes="(max-width: 768px) 100vw, 50vw"
-              frameClass="bg-[oklch(0.72_0.045_40)] dark:bg-[oklch(0.38_0.04_40)]"
+              frameClass="bg-[oklch(0.72_0.045_40)]"
             />
           </div>
 
@@ -137,7 +155,7 @@ export default function AboutPage() {
                 src="/about/creation2.png"
                 alt="Application de peinture au pinceau sur une pièce en bois"
                 sizes="(max-width: 768px) 100vw, 50vw"
-                frameClass="bg-[oklch(0.72_0.025_250)] dark:bg-[oklch(0.38_0.03_250)]"
+                frameClass="bg-[oklch(0.72_0.025_250)]"
               />
             </div>
             <div

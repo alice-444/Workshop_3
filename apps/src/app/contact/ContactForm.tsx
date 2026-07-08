@@ -20,7 +20,7 @@ type FieldErrors = Partial<Record<keyof z.infer<typeof schema>, string>>;
 const EMPTY = { name: "", email: "", subject: "", message: "", consent: false };
 
 const fieldClass =
-  "w-full rounded-lg border border-foreground/30 bg-muted/60 px-3 py-2 text-sm text-foreground transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 dark:bg-input/30";
+  "w-full rounded-lg border border-foreground/30 bg-muted/60 px-3 py-2 text-sm text-foreground transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20";
 
 const labelClass = "text-sm text-foreground";
 

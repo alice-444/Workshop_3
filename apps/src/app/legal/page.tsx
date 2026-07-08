@@ -1,10 +1,27 @@
 import type { Metadata } from "next";
 import LegalClient from "./LegalClient";
 import { TABS, type TabId } from "@/data/legal.data";
+import { SITE_URL } from "@/lib/site";
+
+const TITLE = "Informations légales";
+const DESCRIPTION =
+    "Retrouvez les informations légales d'Animal-Totem : mentions légales, conditions générales de vente (CGV) et politique de confidentialité.";
 
 export const metadata: Metadata = {
-    title: "Informations légales",
-    description: "Retrouvez les informations légales d'Animal-Totem : mentions légales, conditions générales de vente (CGV) et politique de confidentialité.",
+    title: TITLE,
+    description: DESCRIPTION,
+    alternates: { canonical: "/legal" },
+    openGraph: {
+        type: "website",
+        url: `${SITE_URL}/legal`,
+        title: TITLE,
+        description: DESCRIPTION,
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: TITLE,
+        description: DESCRIPTION,
+    },
 };
 
 export default async function LegalPage({

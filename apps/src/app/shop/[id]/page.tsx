@@ -7,6 +7,10 @@ import ProductGallery from "@/components/product/ProductGallery";
 import StarRating from "@/components/ui/StarRating";
 import { getProducts, getProduct, normalizeProduct } from "@/lib/shopify";
 import ProductBuyBox from "@/components/product/ProductBuyBox";
+import { SITE_URL } from "@/lib/site";
+
+// ISR : régénère la fiche au plus toutes les 60 s pour refléter le catalogue Shopify.
+export const revalidate = 60;
 
 const priceFormatter = new Intl.NumberFormat("fr-FR", {
   style: "currency",
@@ -73,8 +77,31 @@ export default async function ProductPage({
   const byCategory = others.filter((p) => p.category === product.category);
   const related = (byCategory.length > 0 ? byCategory : others).slice(0, 4);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.image ? [product.image] : undefined,
+    sku: product.id,
+    category: categoryLabel(product.category),
+    offers: {
+      "@type": "Offer",
+      url: `${SITE_URL}/shop/${product.handle}`,
+      priceCurrency: "EUR",
+      price: product.price,
+      availability: outOfStock
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
+    },
+  };
+
   return (
     <main className="overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-24">
         <Breadcrumbs
           items={[
@@ -91,8 +118,7 @@ export default async function ProductPage({
             alt={product.name}
             emoji={product.emoji}
             outOfStock={outOfStock}
-            bgLight={product.bg.light}
-            bgDark={product.bg.dark}
+            bgLight={product.bg}
           />
 
           {/* Informations */}

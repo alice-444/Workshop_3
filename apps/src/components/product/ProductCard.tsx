@@ -26,13 +26,8 @@ export default function ProductCard({ product }: { product: NormalizedProduct })
         aria-label={`Voir ${product.name}`}
       >
         <div
-          className="relative aspect-square overflow-hidden bg-[var(--product-bg)] dark:bg-[var(--product-bg-dark)]"
-          style={
-            {
-              "--product-bg": product.bg.light,
-              "--product-bg-dark": product.bg.dark,
-            } as CSSProperties
-          }
+          className="relative aspect-square overflow-hidden bg-[var(--product-bg)]"
+          style={{ "--product-bg": product.bg } as CSSProperties}
         >
           {product.image ? (
             <Image

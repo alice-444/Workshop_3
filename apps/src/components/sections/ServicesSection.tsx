@@ -32,7 +32,7 @@ const SERVICES = [
 
 export default function ServicesSection() {
   return (
-    <section className="py-16 bg-[oklch(0.96_0.018_70)] dark:bg-[oklch(0.185_0.025_52)]">
+    <section className="py-16 bg-[oklch(0.96_0.018_70)]">
       <div className="max-w-5xl mx-auto px-6 flex flex-col gap-16">
 
         <div className="text-center">
@@ -49,7 +49,7 @@ export default function ServicesSection() {
 
             {/* Visuel */}
             <div
-              className={`${service.framed ? "bg-[oklch(0.93_0.035_90)] dark:bg-[oklch(0.3_0.03_80)] p-4 rounded-[2rem]" : ""} ${service.reverse ? "order-1 md:order-2" : ""}`}
+              className={`${service.framed ? "bg-[oklch(0.93_0.035_90)] p-4 rounded-[2rem]" : ""} ${service.reverse ? "order-1 md:order-2" : ""}`}
             >
               <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-muted">
                 <Image

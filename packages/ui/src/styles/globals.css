@@ -4,8 +4,6 @@
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
-@custom-variant dark (&:is(.dark *));
-
 :root {
   /* Charte couleur « bois / lin » — lumière */
   /* Background : ivoire chaud */
@@ -61,58 +59,6 @@
   --sidebar-accent: #c5bfa4;
   --sidebar-accent-foreground: #2d2825;
   --sidebar-border: #e4e0d6;
-  --sidebar-ring: #c5bfa4;
-}
-
-.dark {
-  /* Déclinaison nuit, dérivée de la même charte (bleu nuit + sauge) */
-  --background: #0e2230;
-  --foreground: #f4f1ea;
-
-  --card: #102837;
-  --card-foreground: #f4f1ea;
-
-  --popover: #102837;
-  --popover-foreground: #f4f1ea;
-
-  /* Primary : sauge claire, ressort sur le bleu nuit */
-  --primary: #c5bfa4;
-  --primary-foreground: #102837;
-
-  /* Secondary : bleu nuit éclairci */
-  --secondary: #1b3340;
-  --secondary-foreground: #f4f1ea;
-
-  /* Muted */
-  --muted: #1b3340;
-  --muted-foreground: #a7a7a4;
-
-  /* Accent : sauge */
-  --accent: #c5bfa4;
-  --accent-foreground: #102837;
-
-  /* Destructive */
-  --destructive: #d9694f;
-
-  /* Border : séparation subtile sur fond sombre */
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: #c5bfa4;
-
-  /* Charts */
-  --chart-1: #c5bfa4;
-  --chart-2: #8fa6b0;
-  --chart-3: #a7a7a4;
-  --chart-4: #a89f84;
-  --chart-5: #e4e0d6;
-
-  --sidebar: #102837;
-  --sidebar-foreground: #f4f1ea;
-  --sidebar-primary: #c5bfa4;
-  --sidebar-primary-foreground: #102837;
-  --sidebar-accent: #1b3340;
-  --sidebar-accent-foreground: #f4f1ea;
-  --sidebar-border: oklch(1 0 0 / 12%);
   --sidebar-ring: #c5bfa4;
 }
 

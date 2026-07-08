@@ -2,11 +2,29 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import ContactForm from "./ContactForm";
 import FaqSection from "@/components/faq/FaqSection";
+import { SITE_URL } from "@/lib/site";
+
+const TITLE = "Contact";
+const DESCRIPTION =
+  "Une question, un projet sur-mesure ou l'envie de réserver un atelier ? Écrivez à Animal-Totem via le formulaire de contact.";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Une question, un projet sur-mesure ou l'envie de réserver un atelier ? Écrivez à Animal-Totem via le formulaire de contact.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    type: "website",
+    url: `${SITE_URL}/contact`,
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [{ url: `${SITE_URL}/contact/books.png`, alt: "Atelier Animal-Totem" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [`${SITE_URL}/contact/books.png`],
+  },
 };
 
 export default function ContactPage() {

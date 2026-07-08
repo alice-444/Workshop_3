@@ -213,12 +213,12 @@ export default function CartPopover() {
                   <div className="flex justify-end">
                     {checkoutUrl ? (
                       <a href={checkoutUrl} onClick={() => setOpen(false)}>
-                        <Button size="lg" className="px-10 h-12 text-xs tracking-[0.15em] uppercase">
+                        <Button size="lg" className="px-10 h-12 text-lg font-medium" style={{ fontFamily: "var(--font-body)" }}>
                           Payer
                         </Button>
                       </a>
                     ) : (
-                      <Button size="lg" disabled className="px-10 h-12 text-xs tracking-[0.15em] uppercase">
+                      <Button size="lg" disabled className="px-10 h-12 text-lg font-medium" style={{ fontFamily: "var(--font-body)" }}>
                         Payer
                       </Button>
                     )}

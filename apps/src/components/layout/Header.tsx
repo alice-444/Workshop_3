@@ -21,11 +21,13 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 pointer-events-none">
-      {/* Bandeau supérieur */}
-      <div className="pointer-events-auto bg-secondary text-secondary-foreground text-center py-1.5 text-xs tracking-[0.2em] uppercase font-light" style={{ fontFamily: "var(--font-body)" }}>
-        Livraison soignée · Pièces uniques
-      </div>
+    <header className="relative z-50">
+      {/* Bandeau supérieur — page d'accueil uniquement */}
+      {pathname === "/" && (
+        <div className="pointer-events-auto bg-secondary text-secondary-foreground text-center py-1.5 text-xs tracking-[0.2em] uppercase font-light" style={{ fontFamily: "var(--font-body)" }}>
+          Livraison soignée · Pièces uniques
+        </div>
+      )}
 
       <div className="px-4 pt-3 pb-2">
         <div className="w-full pointer-events-auto">

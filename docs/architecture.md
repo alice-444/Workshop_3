@@ -4,6 +4,19 @@
 
 Le site est **headless** : le frontend (Next.js) est totalement découplé du back-office e-commerce. **Shopify** porte le catalogue, les stocks, le panier et le paiement via sa **Storefront API** (GraphQL) ; le front ne gère que l'UI et délègue le checkout à Shopify.
 
+### Vue d'ensemble (schéma pédagogique)
+
+Lecture à deux niveaux — analogie « vitrine / caisse » pour tout public, noms
+techniques réels en sous-titre. La **vitrine** (site Next.js) est séparée de la
+**réserve & caisse** (Shopify) et les deux dialoguent par une **API** (le pont) :
+le site demande les produits, Shopify renvoie catalogue, prix et stocks, et
+encaisse le paiement de façon sécurisée. L'artisane gère tout depuis Shopify,
+sans toucher au code.
+
+![Architecture headless du site Animal-Totem : le client utilise la vitrine (Next.js/Vercel), qui interroge Shopify (réserve, caisse, paiement sécurisé) via une API ; l'artisane gère la boutique depuis Shopify.](./assets/architecture-headless.png)
+
+> Source vectorielle : [`assets/architecture-headless.svg`](./assets/architecture-headless.svg).
+
 ### Vue macro
 
 ```mermaid

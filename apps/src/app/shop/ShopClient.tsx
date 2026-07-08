@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Search, X } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import type { NormalizedProduct } from "@/lib/shopify";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -15,6 +15,7 @@ export default function ShopClient({
   categories: string[];
 }) {
   const [category, setCategory] = useState("tout");
+  const [categoryOpen, setCategoryOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -72,26 +73,56 @@ export default function ShopClient({
       </div>
 
       {/* Filtre catégorie — masqué quand la recherche ne trouve rien */}
-      <div className={`mb-8 ${products.length === 0 ? "hidden" : ""}`}>
-        <label htmlFor="shop-category" className="sr-only">
-          Catégorie
-        </label>
-        <select
-          id="shop-category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="bg-transparent border border-border/60 rounded-md px-4 py-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer hover:border-border transition-colors"
+      <div className={`relative mb-8 w-fit ${products.length === 0 ? "hidden" : ""}`}>
+        <button
+          type="button"
+          onClick={() => setCategoryOpen((v) => !v)}
+          aria-haspopup="listbox"
+          aria-expanded={categoryOpen}
+          className="flex items-center gap-8 rounded-xl border border-border bg-card px-5 py-3 text-base text-foreground cursor-pointer transition-colors hover:border-foreground/30 outline-none focus-visible:ring-2 focus-visible:ring-ring"
           style={{ fontFamily: "var(--font-body)" }}
         >
-          <option value="tout" className="bg-background text-foreground">
-            Catégorie
-          </option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat} className="bg-background text-foreground">
-              {cat}
-            </option>
-          ))}
-        </select>
+          <span>{category === "tout" ? "Catégorie" : category}</span>
+          <ChevronDown
+            size={18}
+            className={`shrink-0 transition-transform duration-200 ${categoryOpen ? "rotate-180" : ""}`}
+            aria-hidden="true"
+          />
+        </button>
+
+        {categoryOpen && (
+          <>
+            {/* Ferme le menu au clic à l'extérieur */}
+            <div
+              className="fixed inset-0 z-10"
+              aria-hidden="true"
+              onClick={() => setCategoryOpen(false)}
+            />
+            <ul
+              role="listbox"
+              aria-label="Catégorie"
+              className="absolute left-0 top-full mt-2 z-20 min-w-full w-max list-none overflow-hidden rounded-xl border border-border bg-card shadow-md divide-y divide-border"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {["tout", ...categories].map((cat) => (
+                <li key={cat}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={category === cat}
+                    onClick={() => {
+                      setCategory(cat);
+                      setCategoryOpen(false);
+                    }}
+                    className={`w-full px-5 py-3 text-left text-base transition-colors hover:bg-accent hover:text-accent-foreground ${category === cat ? "text-foreground font-medium" : "text-foreground/85"}`}
+                  >
+                    {cat === "tout" ? "Toutes les catégories" : cat}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
 
       {/* Grille produits */}

@@ -1,162 +1,208 @@
 import type { Metadata } from "next";
 import type { Route } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@e-commerce/ui/components/button";
-import ServicesSection from "@/components/sections/ServicesSection";
 
 export const metadata: Metadata = {
   title: "À propos",
   description:
-    "Rencontrez Camille, créatrice de l'atelier Animal-Totem. Une artisane qui façonne à la main des objets en bois local, pensés pour durer.",
+    "Rencontrez Claire, artiste plasticienne et conteuse, créatrice d'Animal-Totem : créations en bois sur-mesure et ateliers créatifs pour les jeunes publics.",
 };
 
-const STATS = [
-  { value: "15 ans", label: "à l'établi" },
-  { value: "100 %", label: "bois local" },
-  { value: "Pièces", label: "uniques" },
-] as const;
+const SUR_MESURE_INTRO = [
+  "Chaque création que je réalise est avant tout une pièce unique, née d'une idée, d'un dessin et d'un travail artisanal.",
+  "Je conçois mes objets décoratifs en relief grâce à la superposition de différentes couches de bois. Cette technique donne naissance à des compositions tout en douceur, aux volumes délicats, qui apportent poésie et personnalité à une chambre d'enfant ou à tout autre intérieur.",
+  "Du premier croquis jusqu'aux dernières finitions, chaque étape est réalisée à la main dans mon atelier : je dessine, découpe le bois, ponce chaque élément avec soin, assemble les différentes couches puis applique la peinture et les finitions. Ce travail minutieux demande du temps, mais c'est ce qui confère à chaque pièce son caractère unique et artisanal.",
+];
 
-const VALUES = [
-  {
-    emoji: "🌳",
-    title: "Bois choisi",
-    description:
-      "Des essences locales sélectionnées une à une, séchées lentement et travaillées dans le respect de leur fil.",
-  },
-  {
-    emoji: "✋",
-    title: "Tout à la main",
-    description:
-      "Gouge, couteau, tour à bois : chaque geste laisse sa trace. Aucune pièce n'est tout à fait identique à une autre.",
-  },
-  {
-    emoji: "♻️",
-    title: "Pensé pour durer",
-    description:
-      "Des finitions naturelles à l'huile et à la cire, des assemblages solides, des objets qui vieillissent bien.",
-  },
-] as const;
+const SUR_MESURE_SUITE = [
+  "Vous retrouverez sur ce site plusieurs collections, notamment des têtes d'animaux en bois et d'autres objets décoratifs. Mais parce que chaque histoire est différente, je vous propose également de réaliser des créations sur mesure.",
+  "Vous rêvez d'un animal qui ne figure pas dans la collection ? Vous souhaitez un mobile bébé sur un thème particulier ? Je peux imaginer et créer une pièce spécialement pour vous, en échangeant avec vous afin de donner vie à votre projet.",
+  "Choisir une de mes créations, c'est faire entrer chez vous un objet fabriqué avec passion, patience et savoir-faire, pensé pour durer et raconter une histoire.",
+];
+
+const ATELIERS_TEXTE = [
+  "Depuis toujours, la nature, les animaux et l'imaginaire nourrissent mon travail de création. À travers mes contes, mes décors et mon théâtre d'ombres, je cherche à ouvrir des portes vers des univers poétiques où l'émerveillement, la curiosité et la participation des enfants occupent une place essentielle.",
+  "Je crée des décors en bas-relief en bois peint pour mes propres spectacles de conte ainsi que pour des projets destinés aux écoles et aux structures culturelles. Chaque décor est conçu comme une invitation au voyage, mêlant travail artisanal et narration.",
+  "Autrice de mes histoires, j'imagine des contes participatifs qui encouragent les enfants à devenir acteurs du récit. Ces spectacles sont souvent accompagnés d'ateliers d'arts plastiques permettant de prolonger l'expérience créative, d'explorer les thèmes abordés et de développer l'expression personnelle de chacun.",
+];
+
+const ATELIERS_IMAGES = [
+  { src: "/about/jellyfish.jpg", alt: "Spectacle devant des enfants" },
+  { src: "/about/wolf.jpg", alt: "Décor en bas-relief éclairé" },
+  { src: "/about/whale.jpg", alt: "Décor de baleine en bois peint" },
+];
+
+function Framed({
+  src,
+  alt,
+  aspect = "aspect-4/3",
+  sizes,
+  frameClass = "bg-[oklch(0.93_0.035_90)] dark:bg-[oklch(0.3_0.03_80)] ring-1 ring-border/60",
+}: {
+  src: string;
+  alt: string;
+  aspect?: string;
+  sizes: string;
+  frameClass?: string;
+}) {
+  return (
+    <div className={`${frameClass} p-2 rounded-2xl`}>
+      <div className={`relative ${aspect} w-full overflow-hidden rounded-xl bg-muted`}>
+        <Image src={src} alt={alt} fill className="object-cover" sizes={sizes} />
+      </div>
+    </div>
+  );
+}
 
 export default function AboutPage() {
   return (
     <main className="overflow-x-hidden">
-      {/* En-tête */}
-      <section className="max-w-6xl mx-auto px-6 pt-12 pb-16">
-        <header className="max-w-2xl mb-14">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-px w-8 bg-primary" />
-            <p
-              className="text-xs uppercase tracking-[0.3em] text-primary font-light"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              L'atelier
-            </p>
-          </div>
-          <h1
-            className="text-5xl md:text-6xl font-light text-foreground leading-[1.05] mb-5"
-            style={{ fontFamily: "var(--font-heading)" }}
-          >
-            La main qui <em className="text-primary not-italic">façonne</em>
-          </h1>
-          <p
-            className="text-base text-muted-foreground leading-relaxed font-light"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Animal-Totem, c'est l'atelier d'une créatrice passionnée de bois et de
-            formes vivantes. Ici, chaque objet naît d'une bille brute et de beaucoup
-            de patience.
-          </p>
-        </header>
+      {/* Présentation */}
+      <section className="max-w-6xl mx-auto px-6 pt-12 pb-20">
+        <h1
+          className="text-5xl md:text-6xl font-normal text-foreground text-center leading-tight mb-14"
+          style={{ fontFamily: "var(--font-heading)" }}
+        >
+          À propos
+        </h1>
 
-        {/* Présentation de la créatrice */}
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Portrait */}
-          <div
-            className="relative min-h-[420px] rounded-3xl overflow-hidden flex items-center justify-center bg-[oklch(0.88_0.05_66)] dark:bg-[oklch(0.27_0.04_60)]"
-            aria-hidden="true"
-          >
-            <div
-              className="absolute inset-0 opacity-[0.12]"
-              style={{
-                backgroundImage:
-                  "repeating-radial-gradient(ellipse at 50% 55%, transparent 0px, transparent 22px, oklch(0.42 0.07 55) 24px, transparent 26px)",
-              }}
-            />
-            <span className="relative text-8xl drop-shadow-lg select-none">👩‍🎨</span>
-          </div>
+          <Framed
+            src="/about/claire.png"
+            alt="Claire dans son atelier"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
 
-          {/* Bio */}
+          {/* Identité */}
           <div className="flex flex-col gap-6">
             <h2
-              className="text-3xl md:text-4xl font-light text-foreground leading-tight"
+              className="text-5xl md:text-6xl font-semibold text-foreground"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              Bonjour, je suis <span className="text-primary">Camille</span>
+              Claire
             </h2>
-            <div
-              className="flex flex-col gap-4 text-base text-muted-foreground leading-relaxed font-light"
+            <p
+              className="text-3xl md:text-4xl text-foreground leading-snug pl-8 whitespace-pre-line"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              {"Artiste plasticienne\n/\nConteuse"}
+            </p>
+            <div className="h-1 bg-accent rounded-full" />
+            <p
+              className="text-sm text-foreground/85 leading-relaxed max-w-md"
               style={{ fontFamily: "var(--font-body)" }}
             >
-              <p>
-                Ébéniste de formation, j'ai posé mes outils il y a quinze ans dans
-                un petit atelier lyonnais. Ce qui m'anime, c'est cet instant où une
-                forme apparaît sous la gouge — comme si l'animal, l'objet ou le totem
-                attendait déjà dans le bois.
-              </p>
-              <p>
-                Je travaille exclusivement des essences locales, récupérées auprès de
-                scieries de la région. Chaque pièce est sculptée, tournée ou assemblée
-                à la main, puis nourrie d'huiles et de cires naturelles. Rien n'est
-                pressé : le bois impose son rythme, je le suis.
-              </p>
-            </div>
-
-            <p
-              className="text-2xl text-foreground/90 italic leading-snug border-l-2 border-primary pl-4"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              « Je ne crée pas des objets, je révèle ce que le bois portait déjà. »
+              Installée en tant qu&apos;auto-entrepreneuse depuis trois ans, je développe
+              des projets où se rencontrent les arts plastiques, le conte et la
+              transmission, avec le désir de créer des expériences sensibles, créatives
+              et accessibles aux jeunes publics.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Services */}
-      <ServicesSection />
-
-      {/* CTA final */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="flex flex-col items-center gap-6 text-center">
+      {/* Créations sur-mesure */}
+      <section className="bg-[oklch(0.96_0.018_70)] dark:bg-[oklch(0.185_0.025_52)] py-16">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col gap-16">
           <h2
-            className="text-4xl md:text-5xl font-light text-foreground leading-tight max-w-2xl"
+            className="text-4xl md:text-5xl font-normal text-foreground"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Une idée à faire naître ?
+            Créations sur-mesure
           </h2>
-          <p
-            className="text-base text-muted-foreground leading-relaxed max-w-xl font-light"
+
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div
+              className="flex flex-col gap-5 text-sm text-foreground/85 leading-relaxed"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {SUR_MESURE_INTRO.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+            <Framed
+              src="/about/creation1.png"
+              alt="Claire derrière une tête de héron en bois peint"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              frameClass="bg-[oklch(0.72_0.045_40)] dark:bg-[oklch(0.38_0.04_40)]"
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="order-2 md:order-1">
+              <Framed
+                src="/about/creation2.png"
+                alt="Application de peinture au pinceau sur une pièce en bois"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                frameClass="bg-[oklch(0.72_0.025_250)] dark:bg-[oklch(0.38_0.03_250)]"
+              />
+            </div>
+            <div
+              className="order-1 md:order-2 flex flex-col gap-5 text-sm text-foreground/85 leading-relaxed"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {SUR_MESURE_SUITE.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <Link href={"/shop" as Route}>
+              <Button
+                size="lg"
+                className="px-8 h-13 text-lg font-medium"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                Découvrir la collection
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Ateliers créatifs */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col gap-12">
+          <h2
+            className="text-4xl md:text-5xl font-normal text-foreground"
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
+            Ateliers créatifs
+          </h2>
+
+          <div
+            className="flex flex-col gap-4 text-sm text-foreground/85 leading-relaxed"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            Parlons de votre projet, ou laissez-vous porter par les créations déjà
-            sorties de l'atelier.
-          </p>
-          <div className="flex flex-wrap gap-3 justify-center pt-2">
+            {ATELIERS_TEXTE.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-8 max-w-4xl mx-auto w-full">
+            {ATELIERS_IMAGES.map((img) => (
+              <Framed
+                key={img.src}
+                src={img.src}
+                alt={img.alt}
+                aspect="aspect-square"
+                sizes="(max-width: 640px) 100vw, 33vw"
+              />
+            ))}
+          </div>
+
+          <div className="flex justify-center">
             <Link href={"/contact" as Route}>
               <Button
                 size="lg"
-                className="px-8 h-11 text-xs tracking-[0.15em] uppercase"
-                style={{ borderBottomColor: "oklch(0.28 0.05 50)" }}
+                className="px-8 h-13 text-lg font-medium"
+                style={{ fontFamily: "var(--font-body)" }}
               >
-                Me contacter
-              </Button>
-            </Link>
-            <Link href={"/shop" as Route}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="px-8 h-11 text-xs tracking-[0.15em] uppercase"
-              >
-                Voir la boutique
+                Contactez-nous
               </Button>
             </Link>
           </div>
